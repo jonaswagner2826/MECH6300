@@ -1,0 +1,1627 @@
+\documentclass[]{article}
+\usepackage{graphicx}
+\usepackage[margin=1in, voffset=.25in]{geometry}
+\usepackage{physics}
+\usepackage{amsmath}
+\setlength\parindent{0pt}
+\usepackage{multicol}
+\usepackage{setspace}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+
+\newcommand{\zz}{\mathcal{Z}}
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\dtoz}{\stackrel{\mathcal{Z}}{\longleftrightarrow}}
+\newcommand{\dtof}{\stackrel{\mathcal{F}}{\longleftrightarrow}}
+
+\newcommand{\ctrb}{\mathcal{C}}
+\newcommand{\obsv}{\mathcal{O}}
+
+
+\begin{document}
+
+\pagestyle{headings}
+\mark{-MECH 6300 (Linear System) - Exam 3 TLDR}
+
+\section*{Important Background}
+
+\subsection*{Imaginary Numbers}
+\begin{multicols}{2}
+\underline{Euler's Identity}
+\begin{displaymath}
+	e^{j\theta} = \cos(\theta) + j \sin(\theta)
+\end{displaymath}
+\columnbreak
+
+\underline{Cos and Sin Identities}
+\begin{align*}
+	\cos(\theta) &= \frac{e^{j\theta}+e^{-j\theta}}{2}\\
+	\sin(\theta) &= \frac{e^{j\theta}-e^{-j\theta}}{j 2}\\
+\end{align*}
+\end{multicols}
+
+
+\subsection*{Partial Fraction Expansion}
+$H(s)$ must be strictly proper.\\
+For Z-Inverse calculations: Divide by $z$ to form $H(z) = \frac{Y(z)}{z}$ to ensure a simpler inverse calculation.
+\begin{multicols}{2}
+
+\begin{align*}
+	H(s)	&= \frac{f(s)}{(s-r)^L(s-\lambda_1)(s-\lambda_2) ... (s-\lambda_{N-L})}\\
+	H(s)	&= \frac{C_1}{s-\lambda_1} + \frac{C_2}{s-\lambda_2} + ... + \frac{C_{N-L}}{s-\lambda_{N-L}}\\
+			&+ \frac{K_{L-1}}{s-r} + \frac{K_{L-2}}{(s-r)^2} + ... + \frac{K_0}{(s-r)^L}\\
+\end{align*}
+		
+\begin{align*}
+	C_i		&= \eval{(s-\lambda_i) H(s)}_{s=\lambda_i}\\
+	K_i		&= \eval{\frac{1}{i!} \dv[i]{s} \qty{(s-r)^L H(s)}}_{s=r}
+\end{align*}
+\end{multicols}
+
+\subsection*{General Matrix Algebra Notes}
+* More info could be added to further explain even more background on Linear Algebra... such as (square) matrix properties... matrix operations/properties\\
+
+\textbf{Definitions:}
+\begin{enumerate}
+	\item \underline{Non-singular (Inverteble):} A matrix is nonsingular if an inverse for the matrix exists.
+		\begin{itemize}
+			\item Calculator Test: Take the inverse and ensure it exists.
+			\item An inverse exists if $\det(A) \neq 0$
+		\end{itemize}
+	\item \underline{Rank:} The rank of the matrix is the number of linearly independent rows in the matrix.
+		\begin{itemize}
+			\item Calculator Test: Find the Row Echelon form and the number of non-zero rows is the rank.
+			\item A matrix has full rank iff its determinant is nonzero.
+		\end{itemize}
+\end{enumerate}
+
+
+\textbf{Eigen Values and Vectors:}\\
+Eigen Values $\lambda$ and Eigen Vectors $x$ for the matrix $A$ satisfy the following:
+\begin{align*}
+	A x = \lambda x
+\end{align*}
+
+These can be found by solving for each in:
+\begin{displaymath}
+	\qty(A-\lambda I)x = 0
+\end{displaymath}
+
+\textbf{Characteristic Polynomial:}\\
+The characteristic polynomial is defined as:
+\begin{displaymath}
+	\Delta(\lambda) = \det(A - \lambda I)
+\end{displaymath}
+
+
+
+\section*{Linear Algebra Background}
+
+*Explain state-space equations and defintions... Linearization...  Eigenvalue problem... ... Functions of a square matrix\\
+
+	\subsection*{Lyapnov Equation}
+	At the moment info isn't here... check book page 85
+
+
+\section*{Linear Systems Fundementals}
+System concepts/properties... LTI and LTV systems... transfer function...\\
+jordan form/minimal polynomial\\
+
+
+
+	\subsection*{Simularity Transforms}
+		Simularity Transforms(Model Decomp... Diagonilization... Equivelent Systems (conical forms)... Kalman Decomposition)\\
+		\subsubsection*{Model Decomposition (Jordan Form)}
+			This is a simularity transform that splits everything into modal states... is the jordan form:\\
+			\textbf{Procedure:}\\
+			\begin{enumerate}
+				\item Find the eigen values and vectors of $A$:
+				\begin{align*}
+					A \zeta_i = \lambda_i \zeta_i
+					\{\lambda_1,\cdots,\lambda_n\}\\
+					\{\zeta_1,\cdots,\zeta_n\}
+				\end{align*}
+				If there are non-distinct eigenvectors the generalized eigenvalues need to be constructed and included.
+				\item Construct the simulatrity transform matrix $M$:
+				\begin{displaymath}
+					M = \mqty[\zeta_1 & \zeta_2 & \cdots & \zeta_n]
+				\end{displaymath}
+				\item The equivelent system is given as:
+				\begin{align*}
+					x &= M q\\
+					\dot{q} &= M^{-1} A M q + M^{-1} B u\\
+					y &= C M q + D u
+				\end{align*}
+			\end{enumerate}
+
+	\subsubsection*{Controllable Conical Form}
+		See notes I guess at this point... \\
+		\begin{align*}
+			&A = \mqty[	0 & 1 & \cdots & 0 \\
+			\vdots & \vdots & \ddots &\vdots \\
+			0 & 0 & \cdots & 1 \\
+			-\alpha_n & -\alpha_{n-1} & \cdots & -\alpha_1]
+			&B = \mqty[	0\\ 0\\ \vdots\\ 1] \\ && \\
+			&C = \mqty[	\beta_n & \beta_{n-1} &\cdots & \beta_1]
+			&D = 0
+		\end{align*}
+	similar to this but this is $n=3$ case:
+			\begin{align*}
+				\bar{\ctrb}^{-1} 	= \mqty[\alpha_3 & \alpha_2 & \alpha_1 & 1 \\
+				\alpha_2 & \alpha_1 & 1 & 0 \\
+				\alpha_1 & 1 & 0 & 0 \\
+				1 & 0 & 0 & 0]
+			\end{align*}
+
+System Realization... Info besides just draw it?\\
+
+\section*{Solutions of State Equations}
+
+Need to define for both LTI and LTV systems...\\
+LTV (general): State Transition Matrix and solutions to LTV systems
+
+
+\section*{Stability}
+Defintions... (steal from DTC?)... BIBO... Marginal... Asymptotic...\\
+LTV(general) notes... Lyapnov Direct Method\\
+(Including Routh... Jury's Table/Schur-Cohn criterion?)
+
+
+
+
+\newpage
+\section*{Controllability and Observability}
+	Consider the following state-space system:
+	\begin{align*}
+		\dot{x}	&= A x + B u, \ \ \ x(0)=x_0\\
+		y		&= C x + D u
+	\end{align*}
+	where the vectors are of dimensions: $x_{x\cross1},\ u_{p\cross1},\ y_{q\cross1}$\\
+	and the state matrices are of dimension: $A_{n \cross n},\ B_{n \cross p},\ C_{q\cross n},\ D_{q\cross p}$.
+	\subsection*{Definitons and Terms:}
+		\begin{enumerate}
+			\item \underline{Controllability:} A system is controllable if there exists a control sequence $u  \in \mathbb{R}^m$ which steers the state $x $ from $x_0$ to the origin in finite time.
+			\item \underline{Stabalizability:} A system is stabalizable if the uncontrollable subsystem is asymptotically stable.
+				\begin{center}
+					Controllability $\implies$ Stabalizability
+				\end{center}
+			\item \underline{Observability:} A system is observable if the initial condition $x_0$ can be determined from the knowledge of $u$ and observation of the output $y$ over a finite time interval.
+			\item \underline{Detectablility:} A system is detectable if the unobservable subsystem is asymptotically stable.
+				\begin{center}
+					Observability $\implies$ Detectability
+				\end{center}
+		\end{enumerate}
+	
+
+		
+	\subsection*{Contrllability and Obserabality Matrices:}
+		\textbf{Controllability Matrix:}
+		The controllability matrix is defined as:
+		\begin{displaymath}
+			\ctrb = \mqty[B	&AB	&\cdots	& A^{n-1}B]_{n\cross n p}
+		\end{displaymath}
+		
+		\textbf{Observability Matrix:}
+		The observability matrix, $\obsv$, is defined as:
+		\begin{displaymath}
+			\obsv = \mqty[C\\ CA\\ \vdots\\ C A^{n-1}]_{n p \cross n}
+		\end{displaymath}
+	
+	\subsection*{Tests:}
+		\textbf{Controllability/Stabalizability:}
+		A system is controllable iff the controllability matrix is full rank:
+		\begin{displaymath}
+			\rank(\ctrb) = n
+		\end{displaymath}
+		A system is stabalizable if (in the Kalman controllability decomposition) the eigenvalues of the uncontrollable subsystem are all in the LHP.
+		
+		\textbf{Controllability/Detectability:}
+		A system is controllable iff the observability matrix is full rank:
+		\begin{displaymath}
+			\rank(\obsv) = n
+		\end{displaymath}
+		A system is detectable if (in the Kalman observabilitty decomposition) the eigenvalues of the uncontrollable subsystem are all in the LHP.
+	
+	\subsection*{Duality:}
+		\begin{center}
+			$(A,B)$ is controllable $\iff$ $(A^T,B^T)$ is observable
+		\end{center}
+
+
+\section*{Static State Feedback Control}
+	Consider the following state-space system:
+	\begin{align*}
+		\dot{x}	&= A x + B u, \ \ \ x(0)=x_0\\
+		y		&= C x + D u
+	\end{align*}
+	where the vectors are of dimensions: $x_{x\cross1},\ u_{p\cross1},\ y_{q\cross1}$\\
+	and the state matrices are of dimension: $A_{n \cross n},\ B_{n \cross p},\ C_{q\cross n},\ D_{q\cross p}$.
+	Let the control law $u$ is defined as:
+	\begin{displaymath}
+		u = Kx + r
+	\end{displaymath}
+	where $r$ is a reference signal and $K_{1\cross n}$ is a static gain matrix (noting that redefining this may introduce a negative K term).\\
+	The closed loop system is given as:
+	\begin{displaymath}
+		\dot{x} = (A+BK)x + B r, \ \ \ x(0) = x_0
+	\end{displaymath}
+	
+	The closed-loop system is reachable iff the open-loop system is controllable. Additionally this means that the eigen values of $(A+BK)$ can be arbitrarily placed.\\
+		
+	%Do I put a figure here of feedack???
+
+	\subsection*{Pole Plaement Theorem}
+
+	\subsubsection*{SISO Case}
+
+		\begin{enumerate}
+			\item Verify that the system is reachable: $\ctrb_n$ is non-singular.
+			\begin{displaymath}
+				\ctrb = \mqty[B	&AB	&\cdots	& A^{n-1}B]_{n\cross n}
+			\end{displaymath}
+			\item Find the characteristic polynomial of the lopen loop system.
+			\begin{displaymath}
+				\Delta(s) = \abs{sI-A} = s^n + \alpha_{n-1} s^{n-1} + \cdots + \alpha_1 s + \alpha_0
+			\end{displaymath}
+%			\item Construct the following sequence of linearly independent vectors:
+%			\begin{align*}
+%				e_n 	&= B\\
+%				e_{n-1}	&= A e_n + \alpha_{n-1} B\\
+%				&\vdots\\
+%				e_1		&= A e_2 + \alpha_1 B
+%				\intertext{This can also be defined more simply as:}
+%				e_{n-i}	&= A e_{n-i+1} + \alpha{n-i}B, \ \forall \ i \in \{1,2,\cdots,n-1\}
+%				\intertext{where $e_n = B$}
+%			\end{align*}
+%			\item Define $P$ and find $P^{-1}$, where: \ \ $P = [e_1 \ e_2 \cdots e_n]$
+%				
+			\item Construct the following matrices:
+			\begin{displaymath}
+				\bar{\ctrb}^{-1} = \mqty[\alpha_{n-1} & \alpha_{n-2} & \cdots & \alpha_1 & 1 \\
+				\alpha_{n-2} & \ddots       & \cdots & 1        & 0 \\
+				\vdots       & \vdots       & \ddots & \vdots   & \vdots \\
+				\alpha_1     & 1            & \cdots & 0        & 0 \\
+				1            & 0            & \cdots & 0        & 0]
+			\end{displaymath}
+			\item For the desired set of closed loop eigenvalues: $\{\eta_1, \eta_2, \cdots, \eta_n\}$, define the ideal closed loop characteristic polynomial as:
+			\begin{displaymath}
+				\Delta_{cls}(s) = \prod_{i=1}^{n} (s-\eta_i) = s^n + \bar{\alpha}_{n-1} s^{n-1} + \cdots + \bar{\alpha}_1 s + \bar{\alpha}_0
+			\end{displaymath}
+			\item The static feedback gain, $F$, can then be found using the Ackerman's Formula:
+			\begin{displaymath}
+				K = \mqty[\alpha_0-\bar{\alpha}_0	&\alpha_1-\bar{\alpha}_1	& \cdots	& \alpha_{n-1}-\bar{\alpha}_{n-1}] P^{-1}
+			\end{displaymath}
+		\end{enumerate}
+
+	\subsection*{MIMO Case}
+		This can be solved in many ways, each detailed in the book. If you have to do in exam, this is the one that  you know best:
+		\subsubsection*{Lyapnov-Eq Method}
+		\begin{enumerate}
+			\item Select an arbritary matrix $F$ with the desired eigen values that are not shared with $A$.
+			\item Select an arbitrary $\bar{K}$ sch that $(F,\bar{K})$ is controllable
+			\item Solve for $T$ in the lyapnov equation:
+			\begin{displaymath}
+				A T - T F = B \bar{K}
+			\end{displaymath}
+			\item If $T$ is singlular ($\det(T) = 0$) then go back to step 1 or 2. If $T$ is nonsingular, the gain $K$ is given as:
+			\begin{displaymath}
+				K = \bar{K} T^{-1}
+			\end{displaymath}
+		\end{enumerate}
+	
+	
+
+\section*{Obsevers}
+	Consider the following state-space system:
+	\begin{align*}
+		\dot{x}	&= A x + B u, \ \ \ x(0)=x_0\\
+		y		&= C x + D u
+	\end{align*}
+	where the vectors are of dimensions: $x_{x\cross1},\ u_{p\cross1},\ y_{q\cross1}$\\
+	and the state matrices are of dimension: $A_{n \cross n},\ B_{n \cross p},\ C_{q\cross n},\ D_{q\cross p}$.\\
+	A Luemberger Observer is defined by the following state equation:
+	
+	\begin{equation}
+		\begin{aligned}
+			\hat{x} &= A \hat{x} + D u + L \qty(y - C \hat{x})\\
+			&= \qty(A - L C) \hat{x} + L y + B u
+		\end{aligned}
+		\label{eq:luemberger_observer}
+	\end{equation}
+	where $L$ is the Luemberger gain matrix and $\qty(A - LC)$ defines the observer dynamics.
+	
+	\subsection*{Full-order}
+		\subsubsection*{SISO Case}
+		First, test observability and construct $\obsv$:
+		\begin{displaymath}
+			\obsv = \mqty[C\\ CA\\ \vdots\\ C A^{n-1}]_{n p \cross n}
+		\end{displaymath}
+		If $\rank(\obsv) = n$ then the observer can be constructed.
+		An observer can be designed similarly to state feedback controller using the following matrix:
+		\begin{displaymath}
+			A^T - C^T K
+		\end{displaymath}
+		where $L=K^T$. So the pole-placement method can be used to do this for the SISO case.\\
+		Quick note to jump to:
+		\begin{displaymath}
+			L_T = \mqty[\alpha_n-\bar{\alpha}_n &\alpha_{n-1}-\bar{\alpha}_{n-1} & \cdots & \alpha_1-\bar{\alpha}_1] P
+		\end{displaymath}
+		
+		\subsubsection*{Lyapnov-Eq Method}
+		First, test observability and construct $\obsv$:
+		\begin{displaymath}
+			\obsv = \mqty[C\\ CA\\ \vdots\\ C A^{n-1}]_{n p \cross n}
+		\end{displaymath}
+		If $\rank(\obsv) = n$ then the observer can be constructed.
+		Let, an observer be constructed as:
+		\begin{displaymath}
+			\dot{z} = F z + G y + H u
+		\end{displaymath}
+		\begin{enumerate}
+			\item Select an arbritary matrix $F$ with the desired eigen values that are not shared with $A$.
+			\item Select an arbitrary $G$ such that $(F,G)$ is controllable
+			\item Solve for $T$ in the lyapnov equation:
+			\begin{displaymath}
+				-F T + T A = G C
+			\end{displaymath}
+			\item If $T$ is singlular ($\det(T) = 0$) then go back to step 1 or 2. If $T$ is nonsingular:
+			\begin{align*}
+				H &= T B\\
+				\hat{x} &= T^{-1} z
+			\end{align*}
+		\end{enumerate}
+	
+	\subsection*{Reduced-order}
+		Two main methods... Split into measured and unmeasured and lyapnov based
+		\subsubsection*{Split into measured and unmeasured}
+			Notes in notebook are ok...
+		\subsubsection*{Lyapnov Based}
+		First, test observability and construct $\obsv$:
+		\begin{displaymath}
+			\obsv = \mqty[C\\ CA\\ \vdots\\ C A^{n-1}]_{n p \cross n}
+		\end{displaymath}
+		If $\rank(\obsv) = n$ then the observer can be constructed.
+		
+		Let, an observer be constructed as:
+		\begin{displaymath}
+			\dot{z} = F z + G y + H u
+		\end{displaymath}
+		where $z$ is the unmeasured states.
+		\begin{enumerate}
+			\item Select an arbritary matrix $F$ with the desired eigen values that are not shared with $A$.
+			\item Select an arbitrary $G_{n\cross q}$ such that $(F,G)$ is controllable
+			\item Solve for $T$ in the lyapnov equation:
+			\begin{displaymath}
+				-F T + T A = G C
+			\end{displaymath}
+			\item Construct $P$:
+			\begin{displaymath}
+				P = \mqty[C \\ T]
+			\end{displaymath}
+			\item If $P$ is singlular ($\det(T) = 0$) then go back to step 1 or 2. If $T$ is nonsingular then the observer can be constructed as:
+			\begin{align*}
+				\dot{z} &= F z + G y + H u\\
+				\hat{x} &= \mqty[C\\T]^{-1} \mqty[y\\z]
+			\end{align*}
+		\end{enumerate}
+
+
+
+\section*{Dynamic Output Feedback}
+See notes I guess... its just state feedback using an observer...\\
+Note from Design Problems...\\
+The compensator TF is given as: 
+\begin{displaymath}
+	G(s) = K (sI - (A+BK+LC))^{-1} L
+\end{displaymath}
+
+\section*{LQR}
+Probably not needed for this exam... might be useful to put in though
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% all of this is from DT Control Systems
+\newpage
+\section*{Discrete Time Fundamentals}
+
+\subsection*{Difference Equations}
+\begin{align*}
+	\textbf{Genearl Equation:} \hspace{.05\columnwidth}
+	y_k	&= f(y_{k-1}, y_{k-2}, ..., y_{k-N}; u_k, u_{k-1},...,u_{k-M})\\
+	\textbf{LTI System Equation:} \hspace{.05\columnwidth}
+	f_k	&= a_1 y_{k-1} + a_2 y_{k-1} +...+ a_N y_{k-N}\\
+	&+ b_0 u_k + b_1 u_{k-1} +...+ b_M u_{k-M}\\
+\end{align*}
+
+
+\subsection*{Characteristic Polynomial}
+\begin{align*}
+	y_k			&= a_1 y_{k-1} + a_2 y_{k-1} +...+ a_N y_{k-N}\\
+	1			&= a_1 z^{-1} + a_2 z^{-2} +...+ a_N z^{-N}\\
+	\Delta(z)	&= z^N - a_1 z^{N-1} - a_2 z^{N-2} -...- a_N\\
+	\Delta(z)	&= (z-r_1)^{L}(z-r_2) ... (s-r_{N-L})
+\end{align*}
+
+\subsection*{Natural Response}
+The roots of the system found from the characteristic polynomial results in the natural response of a system:
+\begin{displaymath}
+	\alpha k^{p-1}r^k
+\end{displaymath}
+
+This expands to multiple roots:
+\begin{align*}
+	y_k	&= \alpha_{1a} (r_1)^k + \alpha_{1b} k (r_1)^k +...+ \alpha_{1L} k^{L-1} (r_1)^{k}\\
+	&+ \alpha_2 (r_2)^k +...+ \alpha_{N-L} (r_{N-L})^k
+\end{align*}
+
+One can then solve for the coefficients using initial conditions.
+
+\subsection*{Forced Response}
+To forced response to any input is equivalent to the convolution of the input signal, $u_k$, and the impulse response, $h_k$.\\
+\begin{enumerate}
+	\item 
+	Solve for $\overline{h}_k$ as the response to $\delta_k$ with zero initial conditions.
+	\item
+	You can then solve for $h_k$ as:
+	\begin{displaymath}
+		h_k = b_0 \overline{h}_k + b_1 \overline{h}_{k-1} +...+ b_M \overline{h}_{k-M}
+	\end{displaymath}
+\end{enumerate}
+
+The forced response, $y_k$, can then be solved for as:
+
+\begin{displaymath}
+	y_k = h_k * u_k = \sum_{i=-\infty}^{\infty} h_{k-i}u_i = \sum_{i=-\infty}^{\infty} h_{i}u_{k-i}
+\end{displaymath}
+
+\section*{The $\zz$-Transform}
+
+Method of transforming discrete time transfer functions into frequency domain:
+
+\begin{displaymath}
+	\zz\{x_k\} = X(z) = \sum_{k=0}^{\infty} x_k z^{-k}\\
+\end{displaymath}
+
+Similar to Laplace for CT Systems:
+
+\begin{displaymath}
+	\zz\{x_k\} 	= \eval{\mathcal{L}\{x_k\}}_{z=e^s}\\
+\end{displaymath}
+
+\subsection*{Properties}
+Has very important properties: (Let $x_k \dtoz X(z)$ and $y_k \dtoz Y(z)$ )
+\begin{enumerate}
+	\item Linearity:
+	\begin{displaymath}
+		A x_k + B y_k \dtoz A X(z) + B Y(z)
+	\end{displaymath}
+	\item Right Time-shift:
+	\begin{displaymath}
+		x_{k-k_0} - \sum_{i=-k_0}^{-1} x_i \delta_{k-i-k_0} \dtoz z^{-k_0} X(z)
+	\end{displaymath}
+	\item Left Time-shift:
+	\begin{displaymath}
+		x_{k+k_0} \dtoz z^{k_0} X(z) - \sum_{i=0}^{k_0-1} x_i z^{-(i-k_0)}
+	\end{displaymath}
+	\item  Frequency Scaling:
+	\begin{displaymath}
+		z_0^k x_k \dtoz X\qty(\frac{z}{z_0})
+	\end{displaymath}
+	\item Convolution:
+	\begin{displaymath}
+		x_k * y_k \dtoz X(z) Y(z)
+	\end{displaymath}
+	\item $\zz$ - differentiation:
+	\begin{displaymath}
+		k x_k \dtoz -z \dv{X}{z}
+	\end{displaymath}
+	\item Initial-value Theorem:
+	\begin{displaymath}
+		\lim\limits_{\abs{z}\rightarrow\infty} X(z) = x_0
+	\end{displaymath}
+	\item Final-value Theorem:
+	\begin{displaymath}
+		\lim\limits_{k \rightarrow \infty} x_k = \overline{x} = \lim\limits_{z\rightarrow1} (z-1)X(z)
+	\end{displaymath}
+\end{enumerate}
+
+\subsection*{Important Transforms}
+\begin{align*}
+	\alpha^k &\dtoz \frac{z}{z-\alpha}
+\end{align*}
+
+
+\newpage
+\section*{Responses of Discrete Time Systems}
+\subsection*{Natural Response}
+To solve for the Natural Response with specific initial values, Linearity and Right Time-shift properties need to be used to convert into frequency domain. Then solve for Y(z):
+
+\begin{displaymath}
+	Y(z) = \frac{p(z)}{\Delta(z)}
+\end{displaymath}
+
+The Natural response can then be found as:
+
+\begin{displaymath}
+	y_k = \mathcal{Z}^{-1}\qty{Y(z)=\frac{p(z)}{\Delta(z)}}
+\end{displaymath}
+
+\subsection*{Forced-Response}
+The frequency response of a DT LTI system can be found as:
+
+\begin{align*}
+	Y(z)	&= H(z) U(z)\\
+	y_k		&= \zz^{-1}\qty{Y(z)}
+\end{align*}
+
+Be sure to use Partial Fraction Expansion to make it easier to convert back to time domain.
+
+\subsection*{Finding Difference Equation from System Response}
+Using the Z transform of the input/output and the characteristic polynomial, the following con be found:
+\begin{displaymath}
+	H(z) = \frac{Y(z)}{U(z)} = \frac{p(z)}{q(z)} = \frac{p(z)r(z)}{q(z)r(z)} = \frac{p(z)r(z)}{\Delta (z)}
+\end{displaymath}
+It is then known that:
+\begin{displaymath}
+	\Delta(z) = q(z)r(z)
+\end{displaymath}
+The following can then be written and solved to find the difference equation:
+\begin{align*}
+	\Delta(z)Y(z) &= p(z) r(z) U(z)\\
+	z^{-N} \qty[\zz^{-1} \qty{\Delta(z)Y(z)}] &= z^{-N} \qty[\zz^{-1} \qty{p(z) r(z) U(z)}]
+\end{align*}
+
+
+\newpage
+\section*{Sampled Data Systems}
+
+\subsection*{Fourier Transform}
+The Fourier Transform converts CT or DT signals to the frequency domain.\\
+
+\textbf{Continuous Time:}
+\begin{align*}
+	y(t)& \dtof Y(j\omega)\\
+	Y(j\omega) 	=& \int_{-\infty}^{+\infty} y(t) e^{-j\omega t} \dd t\\
+	y(t) 		=& \frac{1}{2\pi} \int_{-\infty}^{+\infty} Y(j\omega) e^{j\omega t} \dd \omega\\
+\end{align*}
+
+\textbf{Discrete Time:}
+\begin{align*}
+	y_k& \dtof Y(e^{j\Omega})\\
+	Y(e^{j\Omega}) 	=& \sum_{k=-\infty}^{+\infty} y_k e^{-j k \Omega}\\
+	y_k				=& \frac{1}{2\pi} \int_{2\pi} Y(e^{j\Omega}) e^{j k \Omega} \dd \Omega\\
+\end{align*}
+
+
+\subsection*{Impulse-Train Sampling}
+
+Sampling is done by multiplying a continuous time signal with a train of pulses. The ideal is an infinite train of impulse, $p(t)$, defined as:
+
+\begin{displaymath}
+	p(t) = \sum_{k=-\infty}^{+\infty} \delta (t-kT)
+\end{displaymath}
+
+The sampled signal, $y_p(t)$ is then defined as:
+
+\begin{displaymath}
+	y_p(t) = y(t) p(t) = \sum_{k=-\infty}^{+\infty} y(kT) \delta(t-kT)
+\end{displaymath}
+
+Alternatively, the frequency representation is provided as:
+
+\begin{displaymath}
+	Y_p(j\omega) = \mathcal{F}\{y(t)p(t)\} = \frac{1}{2\pi} \qty[Y(j\omega) * P(j\omega)]
+\end{displaymath}
+
+For impulse train sampling, the sampled signal can be calculated with:
+
+\begin{displaymath}
+	Y_p(j\omega) = \frac{1}{T} \sum_{k=-\infty}^{+\infty} Y(j(\omega - k\omega_s)
+\end{displaymath}
+
+The sampling states that a signal can be fully reconstructed with impulse train sampling if it is true that:
+
+\begin{displaymath}
+	\omega_s = \frac{2\pi}{T} > 2\omega_M
+\end{displaymath}
+
+\subsection*{Holds (D/A Converter)}
+
+\textbf{Zero-order Hold:}\\
+The output is defined as:
+\begin{displaymath}
+	y(t) = y_k
+\end{displaymath}
+
+The transfer function of the system is given as:
+\begin{displaymath}
+	H_0(s) = \frac{1-e^{-sT}}{s} \Rightarrow H_0(j\omega) = T e^{-j\frac{\omega T}{2}} \qty(\frac{\sin \frac{\omega T}{2}}{\frac{\omega T}{2}})
+\end{displaymath}
+
+\textbf{First-order Hold:}\\
+The output is defined as:
+\begin{displaymath}
+	y(t) = y_k + \qty(\frac{y_k - y_{k-1}}{T})(t-kT)
+\end{displaymath}
+
+The Transfer Function is given as:
+\begin{displaymath}
+	H_1(s) = \frac{1+Ts}{T} \qty(\frac{1-e^{-sT}}{s})^2
+\end{displaymath}
+
+
+\subsection*{Natural Response}
+The natural response of a Sampled Data System is defined by its characteristic roots. For a CT LTI system with the characteristic polynomial:
+\begin{displaymath}
+	\Delta (s) = (s-\lambda_1)^{n_1} (s-\lambda_2)^{n_2}... (s-\lambda_p)^{n_p}
+\end{displaymath}
+
+The general CT response is defined as:
+\begin{displaymath}
+	\sum_{i=1}^{p} \sum_{m=0}^{n_i-1} \alpha_{im} t^m e^{\lambda_i t}
+\end{displaymath}
+
+The sampled data system response can then be defined as:
+\begin{displaymath}
+	y_k = y(kT) = \sum_{i=1}^{p} \sum_{m=0}^{n_i-1} \beta_{im} k^m \qty(e^{\lambda_i T})^k, \hspace{.05\columnwidth} \text{where} \hspace{3pt} \beta_{im} = \alpha_{im}T^m
+\end{displaymath}
+
+The conversion between CT and DT roots can be generalized as:
+\begin{displaymath}
+	\lambda_i \leftrightarrow e^{\lambda_i T}
+\end{displaymath}
+
+It is also important to not choose a sampling time that causes two CT roots to become identical DT roots. Therefore, insure the sampling time is chosen so that the following is never satisfied:
+\begin{displaymath}
+	\lambda_i - \lambda_l = j \frac{2\pi n}{T} = j n \omega_s
+\end{displaymath}
+
+
+\newpage
+\subsection*{Forced Response}
+The forced frequency response of a Sampled Data System is defined as:
+\begin{displaymath}
+	Y(z) = \zz\{y_k\} = \zz\{\mathcal{L}^{-1} \{Y(s)\}_{t=kT}\}
+\end{displaymath}
+
+Thus the Transfer Function of the sampled data system is defined as:
+\begin{displaymath}
+	H(z) = \frac{Y(z)}{U(z)} = \frac{\zz\{\mathcal{L}^{-1} \{Y(s)\}_{t=kT}\}}{U(z)}
+\end{displaymath}
+
+\textbf{Zero-order hold:}\\
+The frequency response for the Zero-order hold is defined as:
+\begin{displaymath}
+	Y(z) = \zz\{y_k\} = \zz\{\mathcal{L}^{-1} \{\frac{1}{s}H(s)\}_{t=kT}\}
+\end{displaymath}
+
+Thus the transfer function is defined as:
+\begin{displaymath}
+	H(z) = \frac{Y(z)}{U(z)} = \frac{z-1}{z} \zz\qty{\mathcal{L}^{-1} \qty{\frac{1}{s} H(s)}_{t=kT}}
+\end{displaymath}
+
+\textbf{First-order hold:}\\
+The frequency response for the Zero-order hold is defined as:
+\begin{displaymath}
+	Y(z) = \zz\{y_k\} = \zz\{\mathcal{L}^{-1} \{\frac{1}{T s^2}H(s)\}_{t=kT}\}
+\end{displaymath}
+
+Thus the transfer function is defined as:
+\begin{displaymath}
+	H(z) = \frac{Y(z)}{U(z)} = \frac{(z-1)^2}{z} \zz\qty{\mathcal{L}^{-1} \qty{\frac{1}{T s^2} H(s)}_{t=kT}}
+\end{displaymath}
+
+
+
+
+\newpage
+\section*{Stability}
+\subsection*{Stability of  LTI Systems: (CT \& DT)}
+
+\textbf{Marginally Stable:}\\
+A LTI system is Marginally stable if for any initial condition, the natural response for $u(t) \equiv 0$ is bounded.\\
+
+A CT LTI system is marginally stable iff:
+\begin{displaymath}
+	\real (\lambda) \leq 0 \ \forall \ \lambda \ \text{and,} \ \forall \ \real(\lambda) = 0 \ \text{has multiplicity of 1}
+\end{displaymath}
+
+A DT LTI system is marginally stable iff:
+\begin{displaymath}
+	\abs{\lambda} \leq 1 \ \forall \ \lambda \ \text{and,} \ \forall \ \abs{\lambda} = 1 \ \text{has multiplicity of 1}
+\end{displaymath}
+
+\textbf{Asymptotically Stable:}\\
+A LTI system is Asymptotically stable if for any initial condition, the natural response for $u(t) \equiv 0$ approaches zero: $y(t) \rightarrow 0$ as $t \rightarrow \infty$.\\
+
+A CT LTI system is asymptotically stable iff:
+\begin{displaymath}
+	\real (\lambda) < 0 \ \forall \ \lambda
+\end{displaymath}
+
+A DT LTI system is asymptotically stable iff:
+\begin{displaymath}
+	\abs{\lambda} < 1 \ \forall \ \lambda
+\end{displaymath}
+
+Asymptotic stability also implies BIBO stability.\\
+
+\textbf{BIBO Stability:}\\
+For all initial conditions equal to 0, for every bounded input, $u(t)$, the output is bounded.\\
+
+The following statements are equivalent for CT LTI systems:
+
+\begin{enumerate}
+	\item The system is BIBO stable.
+	\item The impulse response $h(t)$ satisfies:
+	\begin{displaymath}
+		\int_{0^-}^{\infty} \abs{h(t)} \dd t < \infty
+	\end{displaymath}
+	\item $H(s)$ is \textbf{proper} and for poles $\lambda$, $\real (\lambda) < 0 \ \forall \ \lambda$.
+\end{enumerate}
+
+The following statements are equivalent for DT LTI systems:
+
+\begin{enumerate}
+	\item The system is BIBO stable.
+	\item The impulse response $h_k$ satisfies:
+	\begin{displaymath}
+		\sum_{k=0}^{+\infty} \abs{h_k} \dd t < \infty
+	\end{displaymath}
+	\item $H(z)$ has poles $\lambda$, $\abs{\lambda} < 1 \ \forall \ \lambda$.
+\end{enumerate}
+
+\newpage
+\subsection*{Stability of Sampled-Data Systems}
+\textbf{Marginal, Asymptotic, and BIBO Stability:}\\
+Marginal, asymptotic, and BIBO stability all transfer between a CT system and the overall sampled-data system for all hold types and sampling methods.\\
+
+\textbf{Minimal Systems:}\\
+A system is minimal (CT \& DT) if every characteristic root is also a pole. This means that there are no cancellations within the transfer function.\\
+
+A CT system is minimal iff the sampled-data system is minimal.\\
+
+If a minimal system is BIBO stable, then it is also asymptotically stable.
+
+\subsection*{Stability Requirements}
+
+\textbf{DT Polynomial Stability Requirements:}
+
+Let $m(z)$ be defined as:
+\begin{displaymath}
+	m(z) = z^n + \alpha_{n-1}z^{n-1} + \cdots + \alpha_1 z^1 + \alpha_0
+\end{displaymath}
+
+$m(z)$ is stable if each of the roots satisfy:
+\begin{displaymath}
+	\abs{z_0} < 1
+\end{displaymath}
+
+
+\textbf{Sufficient Conditions:}
+
+This is true if:
+\begin{displaymath}
+	\sum_{i=0}^{n-1} \abs{\alpha_i}<1
+\end{displaymath}
+
+This is also true if all coefficients of $m(z)$ are strictly positive and:
+\begin{displaymath}
+	\max \qty{\alpha_{n-1}, \frac{\alpha_{n-2}}{\alpha_{n-1}}, \frac{\alpha_{n-3}}{\alpha_{n-2}}, \cdots,  \frac{\alpha_{0}}{\alpha_{1}}} < 1
+\end{displaymath}
+
+However, this only provides \underline{sufficient} conditions. It is inconclusive if either of these is not true.\\
+
+\textbf{Necessary Conditions:}
+If $m(z)$ is stable, then:
+\begin{enumerate}
+	\item $m(1) = 1 + \alpha_{n-1} + \alpha_{n-2} + \cdots + \alpha_0 > 0$, \textbf{and}
+	\item $(-1)^n m(-1) = 1 - \alpha_{n-1} + \alpha_{n-2} - \cdots + (-1)^n \alpha_0 > 0$
+\end{enumerate}
+
+However, this only provides \underline{necessary} conditions. It may not be stable even if these are true.\\
+
+\textbf{Bilinear Mapping Method}\\
+The Polynomial, $m(z)$, is stable iff each root, $\lambda$, of $\hat{m(s)}$:
+\begin{displaymath}
+	\hat{m(s)} = (1-s)^n m\qty(\frac{1+s}{1-s})
+\end{displaymath}
+satisfies: $\real(\lambda) < 0$\\
+
+This can be determined with Routh-Hurwitz Criterion.\\
+
+
+\newpage
+\subsection*{Jury's Criterion}
+For the polynomial, $m(z)$:
+\begin{displaymath}
+	m(z) = z^n + \alpha_{n-1}z^{n-1} + \cdots + \alpha_1 z^1 + \alpha_0
+\end{displaymath}
+stability can be determined as follows:\\
+
+\underline{Jury's Table:}
+\setstretch{1.5}
+\begin{multicols}{2}
+	
+	$\boldmath{\begin{array}{c c c c c c}
+			1				&\alpha_{n-1}	&\alpha_{n-2}	&\cdots 	&\alpha_1		&\alpha_0\\
+			\alpha_0		&\alpha_1		&\alpha_2		&\cdots 	&\alpha_{n-1}	&1\\
+			\alpha_{n-1}^1	&\alpha_{n-2}^1	&\alpha_{n-3}^1	&\cdots		&\alpha_{0}^1\\
+			\alpha_{0}^1	&\alpha_{1}^1	&\alpha_{2}^1	&\cdots		&\alpha_{n-1}^1\\
+			\alpha_{n-2}^2	&\alpha_{n-3}^2	&\cdots			&\alpha_{0}^2\\
+			\alpha_{0}^2	&\alpha_{1}^2	&\cdots			&\alpha_{n-2}^2\\
+			\vdots			&\vdots			&				&\vdots
+	\end{array}}$
+	
+	
+	\columnbreak
+	
+	\begin{align*}
+		\alpha_{n-1}^1 &= \mdet{1 & \alpha_0 \\ \alpha_{0} & 1} \hspace*{.5in}
+		\alpha_{n-2}^1 = \mdet{1 & \alpha_0 \\ \alpha_{1} & \alpha_{n-1}}\\
+		\alpha_{n-2}^2 &= \mdet{\alpha_{n-1}^1 & \alpha_{0}^1 \\ \alpha_{0}^1 & \alpha_{n-1}^1}\\
+	\end{align*}
+	
+\end{multicols}
+\setstretch{1}
+$m(z)$ is stable iff each $\alpha_{n-i}^i \forall i \leq n$ is strictly proper.
+
+
+
+\subsection*{Schur-Cohn Criterion}
+Considering the Polynomial:
+\begin{displaymath}
+	m(z) = z^n + \alpha_{n-1}z^{n-1} + \cdots + \alpha_1 z^1 + \alpha_0
+\end{displaymath}
+
+Define the following:
+\begin{align*}
+	X &= 
+	\mqty(
+	1 		& \alpha_{n-1} 	& \alpha_{n-2} 	& \cdots 	& \alpha_2\\
+	0 		& 1 			& \alpha_{n-1} 	& \cdots 	& \alpha_3\\
+	\vdots 	& \vdots		& \vdots 		& 			& \vdots\\
+	0		& 0				& \cdots		&			& 1
+	)_{(n-1)\cross(n-1)}\\
+	Y &= 
+	\mqty(
+	0			& 0			& 0		&\cdots	& \alpha_0\\
+	0			& 0			& 0		&\cdots	& \alpha_1\\
+	\vdots 		&\vdots		&\vdots & 		& \vdots\\
+	\alpha_0	&\alpha_1	&\cdots	&		&\alpha_{n-2}
+	)_{(n-1)\cross(n-1)}
+\end{align*}
+
+$m(z)$ is stable iff:
+\begin{enumerate}
+	\item $m(1)>0$
+	\item $(-1)^n m(-1) >0$
+	\item All subdeterminants of $X+Y$ and $X-Y$ are strictly positive.
+\end{enumerate}
+Note: The $i$th inner subdeterminant, $\delta_i$ of a square matrix $M$ is the determinant of a matrix formed by eliminating the first and last $i$ rows and columns. (Taking the center elements from the matrix)
+
+\newpage
+\section*{Compenstator Design Basics}
+\subsection*{Plant Modeling}
+The plant is found or given as a difference equation:
+\begin{displaymath}
+	y_k = a_1 y_{k-1} + a_2 y_{k-2} + \cdots + a_N y_{k-N} + b_0 u_k + b_1 u_{k-1} + \cdots + b_M u_{k-M}
+\end{displaymath}
+This is equivalent to:
+\begin{align*}
+	(1-a_1z^{-1} - \cdots - a_N z^{-N}) Y(z) &= (b_0 + b_1z^{-1} + \cdots + b_M z^{-M}) U(z)\\
+	(Z^N - a_1 z^{N-1} - \cdots - a_N)Y(z) &=  (b_0 z^{N} + b_1z^{N-1} + \cdots + b_M z^{N-M}) U(z)
+\end{align*}
+Which is the same as:
+\begin{displaymath}
+	\Delta_p(z) Y(z) = \Gamma_p(z)U(z)
+\end{displaymath}
+where,
+\begin{align*}
+	\Delta_p &= Z^N - a_1 z^{N-1} - \cdots - a_N\\
+	\Gamma_p &= b_0 z^{N} + b_1z^{N-1} + \cdots + b_M z^{N-M}
+\end{align*}
+
+Assume $N \geq M$, otherwise multiply by $z^{M-N}$\\
+
+\subsection*{Compensator Modeling}
+Similarly, the compensator is defined as:
+\begin{displaymath}
+	\Delta_c(z) U(z) = \Gamma_c(z)E(z)
+\end{displaymath}
+where,
+\begin{align*}
+	\Delta_c &= Z^n - c_1 z^{n-1} - \cdots - c_n\\
+	\Gamma_c &= d_0 z^{n} + d_1z^{n-1} + \cdots + d_m z^{n-m}
+\end{align*}
+For a causal compensator, the following must be true: $n \geq 0 \ \& \ m \geq 0$. Also assuming $n\geq m$.\\
+
+\subsection*{Closed-Loop System Model}
+The closed-loop can be modeled as:
+\begin{align*}
+	(\Delta_c(z) \Delta_p(z) + \Gamma_c(z) \Gamma_p(z)) Y(z) &= \Gamma_c(z) \Gamma_p(z) R(z)\\
+	\Delta_{CLS}(z) Y(z) = \Gamma(z) R(z)
+\end{align*}
+where,
+\begin{align*}
+	\Delta_{CLS} &= \Delta_c(z) \Delta_p(z) + \Gamma_c(z) \Gamma_p(z)\\
+	\Gamma(z) &= \Gamma_c(z) \Gamma_p(z)
+\end{align*}
+
+\newpage
+\subsection*{Closed-Loop System Transfer Function}
+Plant Transfer Function:
+\begin{displaymath}
+	G(z) = \frac{\Gamma_p(z)}{\Delta_p(z)}
+\end{displaymath}
+
+Compensator Transfer Function:
+\begin{displaymath}
+	D(z) = \frac{\Gamma_c(z)}{\Delta_c(z)}
+\end{displaymath}
+
+Closed-loop Transfer Function:
+\begin{displaymath}
+	H(z) = \frac{\Gamma_c(z) \Gamma_p(z)}{\Delta_c(z) \Delta_p(z) + \Gamma_c(z) \Gamma_p(z)} = \frac{\Gamma(z)}{\Delta_{CLS}(z)}
+\end{displaymath}
+
+
+
+\section*{Static Compensators \& Root Locus}
+\subsection*{Static Compensation}
+Let $G(z) = \frac{p(z)}{q(z)}$ with $(p,q)$ co-prime. Then,
+\begin{displaymath}
+	H(z) = \frac{KG(z)}{1+KG(z)} = \frac{K p(z)}{q(z) + K p(z)}
+\end{displaymath}
+The poles of $H(z)$ are the roots of $q(z) + K p(z)$ for all gains $K$.\\
+
+\subsection*{Root Locus Definition}
+Assuming $G(z) = \frac{p(z)}{q(z)}$ is strictly proper, where:
+\begin{align*}
+	q(z) &= z^n + \alpha_{n-1} z^{n-1} + \cdots + \alpha_1 z + \alpha_0\\
+	p(z) &= z^n + \beta_{n-1} z^{n-1} + \cdots + \beta_1 z + \beta_0
+\end{align*}
+The set of roots of $\mathbf{q(z) + K p(z)}$ as $K=(-\infty, \infty)$ is defined as:
+\begin{displaymath}
+	\Lambda = \qty{\lambda \in \mathbb{C}: q(\lambda) + K p(\lambda) = 0, K \in (-\infty,\infty)}
+\end{displaymath}
+
+\subsection*{Root Locus Procedure}
+\begin{enumerate}
+	\item The poles of $G$ correspond to $K=0$
+	\item As $K \rightarrow \pm \infty$, each branch goes to a zero of $G$ or $\infty$
+	\item A real point on the locus with $K>0 (K<0)$ must have an odd (even) number of poles and zeros to the right.
+	\item A breakaway point exists iff:
+	\begin{displaymath}
+		p \dv{q}{z} = q \dv{p}{z}
+	\end{displaymath}
+	\item The root-locus is asymptotic to all rays emanating from:
+	\begin{displaymath}
+		z= \frac{\beta_{m-1}- \alpha_{n-1}}{n-m}, \text{ @ angles  } \phi_i = \frac{i\pi}{n-m}, \ \ i = 1,2,\cdots,2(n-m)
+	\end{displaymath}
+	$i$ is even for $K<0$ and odd for $K>0$. If $m=0$, set $\beta_{m-1}=0$.
+\end{enumerate}
+
+\newpage
+\section*{Indirect Compensator Design}
+Indirect approaches involve designing a compensator, $G_c(s)$, for a CT system and approximating an equivalent DT compensator, $G_c(z)$, using various approximation methods.
+
+\subsection*{Hold-Equivalence Technique}
+General Case: (never really need this)
+\begin{displaymath}
+	D(z) = (-1)^n n\! \frac{\zz\qty{\eval{\LL^{-1}\qty{\frac{1}{s^{n+1}}}}_{t=kT}}}{\lim\limits_{a \rightarrow 0}\pdv[n]{a}\qty[\frac{z}{z-e^{-aT}}]}
+\end{displaymath}
+\underline{Zero-Order Hold: (ZOH)}
+\begin{displaymath}
+	D(z) = \frac{z-1}{z} \zz\qty{\eval{\LL^{-1}\qty{\frac{1}{s}G_c(z)}}_{t=kT}}
+\end{displaymath}
+First-Order Hold: (FOH)
+\begin{displaymath}
+	D(z) = \frac{(z-1)^2}{z} \zz\qty{\eval{\LL^{-1}\qty{\frac{1}{Ts^2}G_c(z)}}_{t=kT}}
+\end{displaymath}
+
+\subsection*{Numerical Integration}
+Forward Rectangular Rule: (FRR)
+\begin{displaymath}
+	D(z) = \eval{G_c(s)}_{s=\frac{z-1}{T}}
+\end{displaymath}
+FRR maps stable poles, $\lambda <0$, to $\lambda < 1$ which is \underline{not always stable}: $\abs{\lambda} \nleq 1 \ \forall \lambda$\\
+
+Backward Rectangular Rule: (BRR)
+\begin{displaymath}
+	D(z) = \eval{G_c(s)}_{s=\frac{z-1}{Tz}}
+\end{displaymath}
+Maps stable poles, $\lambda <0$, to within the small circle between 0 and +1, which is always stable.\\
+
+\underline{Trapezoidal Rule: (TR)}
+\begin{displaymath}
+	D(z) = \eval{G_c(s)}_{s=\frac{2}{T}\qty(\frac{z-1}{z+1})}
+\end{displaymath}
+TR maps stable poles, $\lambda <0$, to within the unit circle, $\abs{\lambda}\leq 1 \ \forall \lambda$ which is always stable.
+
+\newpage
+\subsection*{Pole-Zero Mapping: (PZM)}
+Pole-Zero mapping takes all poles and zeros and maps them within the unit disk.
+\begin{enumerate}
+	\item Find all of the poles of $D(z)$ through transforming each pole $\lambda$ of $G_c(s)$: (preserve multiplicities)
+	\begin{displaymath}
+		z_0 = e^{\lambda T} \rightarrow Q(z)
+	\end{displaymath}
+	\item Find all of the zeros of $D(z)$ through transforming each pole $\lambda$ of $G_c(s)$: (preserve multiplicities)
+	\begin{displaymath}
+		z_0 = e^{\lambda T} \rightarrow R(z)
+	\end{displaymath}
+	\item Also assign $n-m$ zeros to $D(z)$ at $z_0 = -1$\\
+	This yields:
+	\begin{displaymath}
+		D(z) = \gamma \frac{(z+1)^{n-m} R(z)}{Q(z)}
+	\end{displaymath}
+	\item Solve for the scaling factor $\gamma$ so that:
+	\begin{displaymath}
+		\abs{D(z_0 = e^{j\omega_0 T})} = \abs{G_c(s_0 = j\omega_0)}
+	\end{displaymath}
+	at an important frequency: $\omega_0$, which is selected as the center of the band frequency.
+\end{enumerate}
+
+\subsection*{Impulse-Invariance Method}
+This method matches the impulse response of the DT compensator to the sampled values of the impulse-response of the CT compensator times T. This is defind as:
+\begin{displaymath}
+	D(z) = T \zz \qty{\eval{\LL^{-1}{G_c(s)}}_{t=kT}}
+\end{displaymath}
+This method is only used on CT compensators who have bandlimited impulse-response:
+\begin{displaymath}
+	G_c(j\omega) = 0, \ \ \abs{\omega}\geq \frac{\pi}{T} = \frac{\omega_s}{2} = \omega_N
+\end{displaymath}
+where $\omega_N$ is the Nyquist Frequency.
+
+\subsection*{Frequency Warping}
+Frequency Warping is an adjustment of the Bilinear Rule and ensures a particular frequency is emulated correctly.
+\begin{displaymath}
+	D(z) = \eval{G_c(s)}_{s=\frac{\omega_0}{\tan(\frac{\omega_0 T}{2})}\qty(\frac{z-1}{z+1})}
+\end{displaymath}
+Where the critical frequency, $\omega_0 < \omega_N = \frac{\omega_s}{2}$
+
+\newpage
+\section*{Direct Design Method}
+For a given $G_p$, a stable $H$ can be chosen to create a $G_c$ which stabilizes the closed-loop system.
+\begin{displaymath}
+	G_c = \frac{H}{G_p (1-h)}
+\end{displaymath}
+However, $G_c$ is not guaranteed to be proper (causal).
+
+\subsection*{Conditions needed for a proper $G_c(z)$}
+Assume $G_p$ is proper and $H$ is strictly proper:
+\begin{displaymath}
+	G_p = \frac{p}{q}, \ \ H = \frac{w}{x}
+\end{displaymath}
+with $\deg p \leq \deg q$ and $\deg w < \deg x$.\\
+
+The following is required for a causal $G_c$:
+\begin{displaymath}
+	\deg x - \deg w \geq \deg q - \deg p
+\end{displaymath}
+
+\subsection*{Deadbeat Controller}
+A deadbeat controller is a controller that places all of the closed-loop poles at $z=0$.\\
+This results in the following:
+\begin{displaymath}
+	H = \frac{G_c G_p}{1+G_c G_p} = \frac{N(z)}{z^n}, \ N(0) \neq 0
+\end{displaymath}
+where $N$ is a polynomial with $\deg N \leq n$.\\
+
+Note: Ensure there are no pole-zero cancellations outside of the unit-disk, as this no longer creates an internally stabilized system.
+
+
+\newpage
+\subsection*{Tracking Error}
+For a BIBO stable closed-loop transfer function:
+\begin{displaymath}
+	H(z) = \frac{w(z)}{x(z)}, \ (w,x) \text{ coprime}
+\end{displaymath}
+with,
+\begin{displaymath}
+	x(z) - w(z) = (z-1)^i m(z), \ m(1) \neq 0
+\end{displaymath}
+where $i$ is the type number of $H$.\\
+
+Let the Test Input be defined as:
+\begin{displaymath}
+	r_k = \frac{k^p}{p\!}\theta_k, \ p = 0,1,2,\cdots
+\end{displaymath}
+
+\textbf{Steady-State Error:}\\
+\begin{displaymath}
+	e_{ss} = 
+	\begin{cases}
+		0	& p<i\\
+		\abs{\frac{m(1)}{x(1)}}	& p=i\\
+		\infty	& p>i\\
+	\end{cases}
+\end{displaymath}
+
+Error Constants:
+\begin{align*}
+	K_p &= G_c(1) G_p(1)\\
+	K_v &= \lim\limits_{z\rightarrow1} (z-1) G_c(z) G_p(z)\\
+	K_a &= \lim\limits_{z\rightarrow1} (z-1)^2 G_c(z) G_p(z)\\
+\end{align*}
+
+Steady-State Error Calculations:
+\setstretch{1.5}
+\begin{center}
+	$\begin{array}{|c|c|c|c|}
+		\hline
+		& \theta_k (p=0)					& k\theta_k (p=1)				& \frac{k^2}{2}\theta_k (p=2)\\
+		\hline
+		0	& e_{ss} = \frac{1}{\abs{1+k_p}}	& e_{ss} = \infty				& e_{ss} = \infty\\
+		\hline
+		1	&e_{ss} = 0							& e_{ss} = \frac{1}{\abs{K_v}}	& e_{ss} = \infty\\
+		\hline
+		2	& e_{ss} = 0						& e_{ss} = 0					& e_{ss} = \frac{1}{\abs{K_a}}\\
+		\hline
+	\end{array}$
+\end{center}
+\setstretch{1}
+
+\newpage
+\subsection*{Transient Analysis}
+
+The response of a second order DT system is modeled as:
+\begin{displaymath}
+	H = \frac{w}{x} = \frac{A z + B}{z^2 - 2 e^{-\zeta\omega_nT} \cos(\omega_n \sqrt{1-\zeta^2}T)z + e^{-2\zeta \omega_n T}}
+\end{displaymath}
+\begin{align*}
+	A &= 1 - e^{-\zeta\omega_n T} \qty[\cos(\omega_n \sqrt{1-\zeta^2} T) + \frac{\zeta}{\sqrt{1-\zeta^2}} \sin(\omega_n \sqrt{1-\zeta^2}T)]\\
+	B &= e^{-2\zeta\omega_n T} + e^{-\zeta\omega_n T} \qty[-\cos(\omega_n \sqrt{1-\zeta^2} T) + \frac{\zeta}{\sqrt{1-\zeta^2}} \sin(\omega_n \sqrt{1-\zeta^2}T)]
+\end{align*}
+
+where $\zeta$ is the dampening coefficient and $\omega_n$ is the natural frequency.\\
+
+
+\textbf{Transient Response Equations:}\\
+
+Rise-time:
+\begin{displaymath}
+	T_r = \frac{\pi - \cos[-1](\zeta)}{\omega_n\sqrt{1-\zeta^2}}
+\end{displaymath}
+
+Peak-time:
+\begin{displaymath}
+	T_p = \frac{\pi}{\omega_n \sqrt{1-\zeta^2}}
+\end{displaymath}
+
+Peak-value:
+\begin{displaymath}
+	M_p = y(T_p) = 1+ e^{-\frac{\zeta\pi}{\sqrt{1-\zeta^2}}}
+\end{displaymath}
+
+Percent Overshoot:
+\begin{displaymath}
+	PO = (100\%) \ e^{-\frac{\zeta\pi}{\sqrt{1-\zeta^2}}}
+\end{displaymath}
+
+Settling Time:
+\begin{displaymath}
+	T_s \approx \frac{\ln(\frac{1}{\delta \sqrt{1-\zeta^2}})}{\zeta \omega_n}, \ delta >0
+\end{displaymath}
+
+\textbf{Modified Step-Response:}
+If the plant has a relative degree of $r+1$, a method to design a compensator is to add r poles at the origin to the second order $H$. This adds a delay of $rT$ to the system response.
+
+Rise-time:
+\begin{displaymath}
+	T_r = \frac{\pi - \cos[-1](\zeta)}{\omega_n\sqrt{1-\zeta^2}}+rT
+\end{displaymath}
+
+Peak-time:
+\begin{displaymath}
+	T_p = \frac{\pi}{\omega_n \sqrt{1-\zeta^2}} +rT
+\end{displaymath}
+
+Settling Time:
+\begin{displaymath}
+	T_s \approx \frac{\ln(\frac{1}{\delta \sqrt{1-\zeta^2}})}{\zeta \omega_n} + rT, \ delta >0 
+\end{displaymath}\\
+
+\textbf{Design Principles:}\\
+Designing for PO:
+\begin{displaymath}
+	\zeta = \frac{\abs{a}}{\sqrt{\pi^2+a^2}}, \ a = p \ln(PO)
+\end{displaymath}
+
+\newpage
+\section*{Modern DT-Controls}
+\subsection*{State-Space Model}
+The State-Space model is based off of the following equations:
+\begin{align*}
+	x_{k+1}	&= A_{[nxn]} x_k + B_{[nxm]} u_k\\
+	\\
+	y_k		&= C_{[pxn]} x_k + D_{[pxm]} u_k
+\end{align*}
+
+where, $x_k$ is the state vector, $u_k$ is the input vector, and $y_k$ is the output vector:
+
+\begin{displaymath}
+	x_k = \mqty[x_{1k}\\ \vdots \\ x_{nk}] \in \mathbb{R}^n \hspace{25pt} u_k = \mqty[u_{1k}\\ \vdots\\ u_{mk}] \in \mathbb{R}^m \hspace{25pt} y_k = \mqty[y_{1k}\\ \vdots\\ y_{pk}] \in \mathbb{R}^p
+\end{displaymath}
+
+The state-space model describes a system of equations that essentially describe the update set for each state and output dependent on the current state variables and the input.\\
+
+\textbf{Characteristic Polynomial:}\\
+The polynomial which describes the dynamics of the system is defined by the characteristic polynomial, $\Delta(z)$, defined as:
+\begin{displaymath}
+	\Delta(z) = \abs{zI - A}
+\end{displaymath}
+The roots of this polynomial are also the eigenvalues of the system.\\
+
+
+\textbf{Defining State-Space Model:}\\
+The state-space model can be derived from a difference equations via the following steps:
+\begin{enumerate}
+	\item Simplify the difference equations to eliminate terms lacking derivatives in equations.
+	\item Define state-variables with updated equivalence:
+	\begin{displaymath}
+		x_{1k} = y_{k-1},\ x_{2k} = y_{k-2},\ \cdots,\ x_{(n-m)} = y_{k-(n-m)},\ x_{(n-m + 1)} = u_{k},\ \cdots,\ x_{nk} = u_{k-m}
+	\end{displaymath}
+	\item Substitute state-variables into governing equations
+	\item Solve for each update variable $(x_{k+1})$ in terms of current variable $(x_{k})$.
+	\item Add equations defining $x_{k+1} = x_k$.
+	\item Write in matrix form to define $A$ and $B$.
+	\item Define $y_k$ equations and put into matrix form to find $C$ and $D$.
+\end{enumerate}
+
+
+\newpage
+\subsection*{State-Space System Response}
+\textbf{State-Transition Matrix (STM):}\\
+The state-transition matrix (STM) is used to find the solution to the state equation. The STM is defined as:
+\begin{displaymath}
+	\Phi_k = A^k\theta_k
+\end{displaymath}
+The solution to the state equation is then defined as:
+\begin{displaymath}
+	x_k = \Phi_k x_0 + \Phi_{k-1}B * u_k
+\end{displaymath}
+Additionally, the output equation is given as:
+\begin{displaymath}
+	y_k = C\ \Phi_k\ x_0 + C\ \Phi_{k-1}\ B*u_k + D\ u_k
+\end{displaymath}
+The STM can be found using z-transforms and are defined as:
+\begin{displaymath}
+	\Phi_{k-1} = \mathcal{Z}^{-1} \qty{(zI-A)^{-1}}
+\end{displaymath}
+Similarly, by the left-shift property:
+\begin{displaymath}
+	\Phi_{k} = \mathcal{Z}^{-1} \qty{z(zI-A)^{-1}}
+\end{displaymath}\\
+
+\textbf{Transfer Function \& Impulse Response}\\
+The impulse response of the system is given as:
+\begin{displaymath}
+	h_k = C \ \Phi_{k-1} \ B + \delta_k D
+\end{displaymath}
+The transfer function is given as:
+\begin{displaymath}
+	H(z) = \frac{Y(z)}{U(z)} = C(zI-A)^{-1}B+D
+\end{displaymath}\\
+
+\textbf{Overall Response:}\\
+The overall response, from the STM, is given as:
+\begin{displaymath}
+	y_k = C\ \Phi_k\ x_0 + C\ \Phi_{k-1}\ B*u_k + D\ u_k
+\end{displaymath}
+The response in the z-domain is given as:
+\begin{displaymath}
+	Y(z) = zC(zI-A)^{-1}x_0 + (C(zI-A)^{-1}B + D)U(z)
+\end{displaymath}\\
+
+\newpage
+\subsection*{Stability of DT State-Space Systems}
+Consider the following state-space system:
+\begin{align*}
+	x_{k+1} &= A x_k + B u_k, \ \ \ i.c.=x_0\\
+	y_k		&= C x_k + D u_k
+\end{align*}
+
+\textbf{Definitions:}
+\begin{enumerate}
+	\item \underline{Bounded:} $x_k$ is bounded if an $M$ exists such that:
+	\begin{displaymath}
+		\norm{x_k}_p < M \ \forall p \in {1, 2, \cdots, \infty}
+	\end{displaymath}
+	\item \underline{Marginal:} $x_k$ is marginal if $x_k$ is bounded for every $x_0$ and $u_k\equiv 0$.
+	\item Final value theorem: $x_k \rightarrow 0$ as $k \rightarrow \infty$ if $\norm{x_k}_p \rightarrow 0$ as $k\rightarrow\infty$.
+	\item \underline{Asymptotic Stability:} The system is asymptotically stable if  $x_k \rightarrow 0$ as $k \rightarrow \infty$  for every $x_0$ and $u_k\equiv 0$.
+	\item \underline{BIBO Stability:} The system is BIBO stable if $y_k$ is bounded for every bounded $u_k$ and $x_0 = 0$.
+\end{enumerate}
+
+\textbf{Stability Tests:}
+\begin{enumerate}
+	\item \underline{Marginal Stability:} The system is marignally stable iff:
+	\begin{enumerate}
+		\item Each eigenvalue, $z_0$, of $A$ satisfies: $\abs{z_0} \leq 1$
+		\item Each eigenvalue with $z_0 =1$ has unit-multiplicity
+	\end{enumerate}
+	\item \underline{Asymptotic Stability:} The system is asymptotically stable iff each eigenvalue $z_0$ of $A$ satisfies: $\abs{z_0} < 1$.
+	\item \underline{BIBO Stability:} The system is BIBO stable iff each pole $z_0$ of
+	\begin{displaymath}
+		H(z) = C(zI-A)^{-1} B + D
+	\end{displaymath}
+	satisfies: $\abs{z_0} < 1$.
+\end{enumerate}
+
+\textbf{Stability Notes:}\\
+In general:
+\begin{center}
+	Asymptotic stability $\implies$ Marginal stability\\
+	\vspace{5pt}
+	Asymptotic stability $\implies$ BIBO stability
+\end{center}
+If a system is minimal:
+\begin{center}
+	Asymptotic stability $\Leftrightarrow$ BIBO stability
+\end{center}
+
+
+\newpage
+\subsection*{State-Controllability \& Reachability}
+Consider the state-equation:
+\begin{displaymath}
+	x_{k+1} = A x_k + B u_k, \ \ \ i.c. = x_0
+\end{displaymath}
+
+\textbf{Definitions:}
+\begin{enumerate}
+	\item \underline{State-Controllability:} A system is controllable if there exists a control sequence $u_k \in \mathbb{R}^m$ which steers the state $x_k$ from $x_0$ to the origin in finite time.
+	\item \underline{State-Reachability:} A system is reachable if there exists a control sequence $u_k \in \mathbb{R}^m$ that an arbitrary state $x_f$ can bee reached from $x_0$  in finite time.
+\end{enumerate}
+\begin{center}
+	State-Reachability $\implies$ State-Controllability
+\end{center}
+
+\textbf{Controllability Matrix:}\\
+The controllability matrix for $k_1$ is defined as:
+\begin{displaymath}
+	\ctrb_{k_1} = \mqty[B	&AB	&\cdots	& A^{k_1-1}B]_{n\cross k_1 m}
+\end{displaymath}
+
+A system is defined as reachable iff there exists a $k_1 < \infty$ such that the controllability matrix has full rank: $\rho(\ctrb_{k_1}) = n$.\\
+The system is said to be reachable in $k_1$ steps if $\rho \ctrb_{k_1} = n$.\\
+The system is not reachable if $\rho \ctrb_{k_1} < 1 \ \forall\ k_1 = 1, 2, \cdots, n$.
+
+\subsection*{Static State-Feedback}
+The static-state feedback system is defined for a closed loop system with the state-equation:
+\begin{displaymath}
+	x_{k+1} = A x_k + B u_k, \ \ \ i.c. = x_0
+\end{displaymath}
+and the control law:
+\begin{displaymath}
+	u_k = F x_k + r_k
+\end{displaymath}
+where $r_k \in \mathbb{R}^m$ is an imputed reference signal.\\
+
+The closed loop system is given as:
+\begin{displaymath}
+	x_{k+1} = (A+BF)x_k + B r_k, \ \ \ i.c. = x_0
+\end{displaymath}
+
+The closed-loop system is reachable iff the open-loop system is reachable.\\
+
+\newpage
+\textbf{Eigenvalue-Placement Algorithm:} (Single-Input Case)\\
+For the given state-equation:
+\begin{displaymath}
+	x_{k+1} = A x_k + B u_k, \ \ \ i.c. = x_0
+\end{displaymath}
+the eigenvalues of the system can be shifted using static state-feedback by the following steps:
+\begin{enumerate}
+	\item Verify that the system is reachable: $\ctrb_n$ is non-singular.
+	\begin{displaymath}
+		\ctrb_n = \mqty[B	&AB	&\cdots	& A^{n-1}B]_{n\cross n}
+	\end{displaymath}
+	\item Find the characteristic polynomial of the lopen loop system.
+	\begin{displaymath}
+		\Delta(z) = \abs{zI-A} = z^n + \alpha_{n-1} z^{n-1} + \cdots + \alpha_1 z + \alpha_0
+	\end{displaymath}
+	\item Construct the following sequence of linearly independent vectors:
+	\begin{align*}
+		e_n 	&= B\\
+		e_{n-1}	&= A e_n + \alpha_{n-1} B\\
+		&\vdots\\
+		e_1		&= A e_2 + \alpha_1 B
+		\intertext{This can also be defined more simply as:}
+		e_{n-i}	&= A e_{n-i+1} + \alpha{n-i}B, \ \forall \ i \in \{1,2,\cdots,n-1\}
+		\intertext{where $e_n = B$}
+	\end{align*}
+	\item Define $T$ and find $T^{-1}$, where: \ \ $T = [e_1 \ e_2 \cdots e_n]$
+	\item For the desired set of closed loop eigenvalues: $\{\eta_1, \eta_2, \cdots, \eta_n\}$, define the ideal closed loop characteristic polynomial as:
+	\begin{displaymath}
+		\Delta_{cls}(z) = \prod_{i=1}^{n} (z-\eta_i) = z^n + \bar{\alpha}_{n-1} z^{n-1} + \cdots + \bar{\alpha}_1 z + \bar{\alpha}_0
+	\end{displaymath}
+	\item The static feedback gain, $F$, can then be found using the Ackerman's Formula:
+	\begin{displaymath}
+		F = \mqty[\alpha_0-\bar{\alpha}_0	&\alpha_1-\bar{\alpha}_1	& \cdots	& \alpha_{n-1}-\bar{\alpha}_{n-1}] T^{-1}
+	\end{displaymath}
+\end{enumerate}
+
+Expansion into multiple-input case can be done as well:
+\begin{enumerate}
+	\item Ensure the system is reachable
+	\item Choose $F_1 \in \mathbb{R}^{m\cross n}$ and $v\in \mathbb{R}^m$ such that:
+	\begin{displaymath}
+		\ctrb_n = \mqty[Bv	&(A+BF_1)Bv	&\cdots	& (A+BF_1)^{n-1}Bv]_{n\cross n}
+	\end{displaymath}
+	is nonsingular.
+	\item Using the eigenvalue-placement algorithm for a single-input case, find $F_2 \in \mathbb{R}^{1\cross n}$ to place the eigenvalues of $A+BF_1$:
+	\begin{displaymath}
+		A + BF_1 + (Bv)F_2 = A + B(F_1+vF_2)
+	\end{displaymath}
+	\item Compute $F = F_1 + vF_2$
+\end{enumerate}
+Be sure to verify that $A+BF$ has eigenvalues at the desired locations.
+
+
+\newpage
+\subsection*{Observability and Constructability}
+Consider the following state-space system:
+\begin{align*}
+	x_{k+1} &= A x_k + B u_k, \ \ \ i.c.=x_0\\
+	y_k		&= C x_k + D u_k
+\end{align*}
+
+\textbf{Definitions:}
+\begin{enumerate}
+	\item \underline{Observability:} A system is observable if the initial condition $x_0$ can be determined from the knowledge of $u_k$ and observation of the output $y_k$ over a finite time interval.
+	\item \underline{Constructability:} A system is constructable if the state $x_k$ can be determined from the knowledge of $u_k$ and observation of the output $y_k$ over a finite time interval.
+\end{enumerate}
+\begin{center}
+	Observability $\implies$ Constructability
+\end{center}
+
+\textbf{Observability Matrix:}\\
+The observability matrix, $\obsv_{k_1}$, is defined for $k_1$ as:
+\begin{displaymath}
+	\obsv_{k_1} = \mqty[C\\ CA\\ \vdots\\ C A^{k_1-1}]_{k_1 p \cross n}
+\end{displaymath}
+
+A system is defined observable iff there exists a $k_1 < \infty$ such that the observability matrix has full rank: $\rho(\obsv_{k_1}) = n$.\\
+The system is said to be observable in $k_1$ steps if $\rho \obsv_{k_1} = n$.\\
+The system is not observable if $\rho \obsv_{k_1} < 1 \ \forall\ k_1 = 1, 2, \cdots, n$.\\
+
+\textbf{DT Observer - State Estimator:}\\
+A state estimator is defined by the following state equation:
+\begin{displaymath}
+	\hat{x}_{k+1} = E \hat{x}_k + H u_k + G y_k, \ \ \ i.c. = \hat{x}_0
+\end{displaymath}
+
+The state estimator error is defined as:
+\begin{displaymath}
+	e_k = x_k - \hat{x}_k
+\end{displaymath}
+
+To ensure that $e_k \rightarrow 0$ as $k \rightarrow \infty$ for any $u_k$ and $\hat{x}_0$, we need to let $E = A-GC$ and $H = B- GD$ and make sure $A-GC$ is a stable matrix.\\
+
+This results in an error-equation:
+\begin{displaymath}
+	e_{k+1} = (A-GC)e_k, \ \ \ e_0 = x_0 - \hat{x_0}
+\end{displaymath}
+
+A $G$ can be found for the state estimator iff system is observable. This can be done as follows:
+\begin{enumerate}
+	\item Define the following:
+	\begin{displaymath}
+		\hat{A} = A^T, \ \ \ \ \hat{B} = C^T, \ \ \ \ \hat{F} = - G^T
+	\end{displaymath}
+	\item The Eigenvalue-placement theorem can be used to find an $\hat{F}$ that assigns arbitrary eigenvalues to $\hat{A} + \hat{B} \hat{F}$.
+	\item $G$ can then be found from the definition of $F$.
+	\item The full order observer can then be defined as:
+	\begin{displaymath}
+		\hat{x}_{k+1} = (A-GC) \hat{x}_k + (B-GD) u_k + G y_k, \ \ \ i.c. = \hat{x}_0
+	\end{displaymath}
+\end{enumerate}
+
+\newpage
+\subsection*{Static Output Feedback}
+A static output system can be defined for a system given as:
+\begin{align*}
+	x_{k+1} &= A x_k + B u_k, \ \ \ i.c.=x_0\\
+	y_k		&= C x_k\\
+	\intertext{with,}
+	u_k &= F y_k + r_k
+\end{align*}
+
+This results in a closed loop system defined as:
+\begin{align*}
+	x_{k+1} &= (A+BFC) x_k + B r_k, \ \ \ i.c.=x_0\\
+	y_k		&= C x_k
+\end{align*}
+The response can easily be adjusted by setting the eigenvalues of $(A+BFC)$, however, even reachability and observability are not sufficient for the existence of a static output feedback control-law.
+
+
+\subsection*{Dynamic Output Feedback}
+Consider the following state-space system:
+\begin{align*}
+	x_{k+1} &= A x_k + B u_k, \ \ \ i.c.=x_0\\
+	y_k		&= C x_k + D u_k
+\end{align*}
+And a compensater given as:
+\begin{align*}
+	\hat{x}_{k+1}	&= (A-GC) \hat{x}_k + (B-GD) u_k + G(y_k-r_k), \ \ \ i.c. = \hat{x}_0\\
+	u_k				&= F \hat{x}_k
+\end{align*}
+The closed loop stability is guaranteed iff an $F$ and $G$ can be found that results in all of the eigenvalues of $\mathcal{A}$ are within the unit-disk.
+\begin{displaymath}
+	\mathcal{A} = \mqty[A	&BF\\	GC	&A-CG+BF]_{2n\cross2n}
+\end{displaymath}
+If an observer state-estimator is used to compensate a system, then the eigenvalues of the closed-loop system are the observer eigenvalues along with the eigenvalues of the original system shifted as if a state-feedback had been applied.
+\begin{displaymath}
+	\Delta_{cls} = \abs{zI_n - (A+BF)} \cdot \abs{zI_n - (A-GC)}
+\end{displaymath}
+Note: The compensator itself may end up not being stable, but the closed-loop system will be.\\
+
+The compensator transfer function is provided as:
+\begin{displaymath}
+	G_c(z) = F (zI_n - (A-GC + (B-GD)F))^{-1}G
+\end{displaymath}

@@ -1,0 +1,1629 @@
+\documentclass[]{article}
+\usepackage{geometry}[margin=1in]
+\usepackage{amsmath}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{setspace}
+\usepackage{fancyvrb}
+
+\setlength\parindent{0pt}
+
+\newcommand{\sectionname}{Section}
+
+% Notation command shortcuts
+\newcommand{\ctrbl}{\mathcal{C}}
+\newcommand{\obsv}{\mathcal{O}}
+
+%\setcounter{section}{-1}
+
+
+%opening
+\title{MECH 6300 - Problem Set D}
+\author{Jonas Wagner}
+\date{2020, November 13}
+
+
+
+\begin{document}
+
+\maketitle
+
+\section{Inverted Pendulum System}
+
+	\subsection{Design Application 2 Background}
+	
+		Design Application 2 is that of an inverted pendulum. This consists of a mass on a rod that extends upward from a movable cart that can be balanced at its upright equilibrium point.
+		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.5\linewidth]{Fig/DesignApplication2}
+			\caption[]{Inverted Pendulum Mechanics Figure}
+			\label{fig:designapplication2}
+		\end{figure}
+		
+		Given the diagram, \figurename \ \ref{fig:designapplication2}, the following parameters are defined:
+		\begin{align*}
+			M &\equiv \text{Mass of the cart}\\
+			m &\equiv \text{Mass at end of the rod}\\
+			l &\equiv \text{Length of the rod}
+		\end{align*}
+		
+		The two primary coordinates of the system are:
+		\begin{align*}
+			z &\equiv \text{Cart z-position}\\
+			\theta &\equiv \text{Pendulum angle}
+		\end{align*}
+		
+		Additional variables are defined in the figure:
+		\begin{align*}
+			h &\equiv \text{Mass height}\\
+			\bar{z} &\equiv \text{Mass z-position}
+		\end{align*} 
+		
+		These variables can be related to the primary coordinates as such:
+		\begin{align}
+			h		&= l \cos(\theta) \label{eq:h_def}\\
+			\bar{z} &= z + l \sin(\theta) \label{eq:z_def}	
+		\end{align}
+		
+		The derivatives of each of these variables can also be computed as such:
+		\begin{align}
+			\dot{h} &= -l \dot{\theta} \sin(\theta) \label{eq:h_dot}\\
+			\dot{\bar{z}} &= \dot{z} + l \dot{\theta}\cos(\theta) \label{eq:z}
+		\end{align}
+		
+		The total kinetic energy, $E_k$, can be defined as the sum of the kinetic energy of the cart and pendulum mass:
+		\begin{align}
+			E_k &= \frac{1}{2} M \dot{z}^2 + \frac{1}{2} m \qty(\sqrt{\dot{\bar{z}}^2 + \dot{h}^2})^2 \label{eq:E_k_original}\\
+				&= \frac{1}{2} M \dot{z}^2 + \frac{1}{2} m \qty(\qty(\dot{z} + l \dot{\theta}\cos(\theta))^2 + \qty(-l \dot{\theta} \sin(\theta))^2)\nonumber\\
+				&= \frac{1}{2} M \dot{z}^2 + \frac{1}{2} m \qty(\qty(\dot{z}^2 + 2 l \dot{z} \dot{\theta}\cos(\theta) + l^2 \dot{\theta}^2 \cos[2](\theta)) + \qty(l^2 \dot{\theta}^2 \sin[2](\theta)))\nonumber\\
+				&= \frac{1}{2} M \dot{z}^2 + \frac{1}{2} m \qty(\dot{z}^2 + 2 l \dot{z} \dot{\theta}\cos(\theta) + l^2 \dot{\theta}^2 \qty(\cos[2](\theta)\sin[2](\theta)))\nonumber
+		\end{align}
+		
+		This results in a simplified kinetic energy equation of:
+		\begin{equation}
+				E_k = \frac{1}{2} (M + m) \dot{z}^2 + m l \dot{z} \dot{\theta}\cos(\theta) + \frac{1}{2} l^2 \dot{\theta}^2
+				\label{eq:E_k_simplified}
+		\end{equation}
+		
+		The potential energy, $E_p$, consists only of the gravitational potential energy within the pendulum mass:
+		\begin{align}
+			E_p &= m g h\\
+			E_p &= m g l \cos(\theta) \label{eq:E_p}
+		\end{align}
+		
+		The Lagrangian can then be defined by the difference between the total kinetic \eqref{eq:E_k_simplified} and potential \eqref{eq:E_p} energy as follows:
+		\begin{align}
+			L &= E_k - E_p\\
+			L &= \frac{1}{2} (M + m) \dot{z}^2 + m l \dot{z} \dot{\theta}\cos(\theta) + \frac{1}{2} ml^2 \dot{\theta}^2 - m g l \cos(\theta) \label{eq:L}
+		\end{align}
+	
+	\subsection{$z$-coordinate Lagrange Equation}
+	
+		Utilizing the Lagrangian of the inverted pendulum system \eqref{eq:L}, the Z-coordinate Lagrange equation can be found using the following equation:
+		\begin{equation}
+			\dv{t} \qty(\pdv{L}{\dot{z}}) - \pdv{L}{z} = f
+			\label{eq:lagrange_Z_original}
+		\end{equation}
+		
+		First, the partial derivatives can be calculated as follows:
+		\begin{align}
+			\pdv{L}{\dot{z}} &= (M+m)\dot{z} + m l \dot{\theta}\cos(\theta) \label{eq:pdv_L_z_dot}\\
+			\pdv{L}{z} &= 0 \label{eq:pdv_L_z}
+		\end{align}
+		
+		The time derivative can then be computed from \eqref{eq:pdv_L_z_dot}:
+		\begin{equation}
+			\dv{t} \qty(\pdv{L}{\dot{z}}) = (M+m)\ddot{z} + m l \qty(\ddot{\theta}\cos(\theta) - \dot{\theta}^2\sin(\theta))
+			\label{eq:dv_pdv_L_z_dot}
+		\end{equation}
+		
+		The Lagrange equation can then be derived using \eqref{eq:lagrange_Z_original}, \eqref{eq:pdv_L_z}, and \eqref{eq:dv_pdv_L_z_dot}:
+		\begin{equation}
+			(M+m)\ddot{z} + m l \qty(\ddot{\theta}\cos(\theta) - \dot{\theta}^2\sin(\theta)) = f
+			\label{eq:lagrange_Z}
+		\end{equation}
+	
+	\subsection{$\theta$-coordinate Lagrange Equation}
+	
+		Utilizing the Lagrangian of the inverted pendulum system \eqref{eq:L}, the $\theta$-coordinate Lagrange equation can be found using the following equation:
+		\begin{equation}
+			\dv{t} \qty(\pdv{L}{\dot{\theta}}) - \pdv{L}{\theta} = 0
+			\label{eq:lagrange_theta_original}
+		\end{equation}
+		
+		First, the partial derivatives can be calculated as follows:
+		\begin{align}
+			\pdv{L}{\dot{\theta}} &= m l \dot{z} \cos(\theta) + m l^2 \dot{\theta} \label{eq:pdv_L_theta_dot}\\
+			\pdv{L}{\theta} &= - m l \dot{z} \dot{\theta} \sin(\theta) + m g l \sin(\theta) \label{eq:pdv_L_theta}
+		\end{align}
+		
+		The time derivative can then be computed from \eqref{eq:pdv_L_theta_dot}:
+		\begin{equation}
+			\dv{t} \qty(\pdv{L}{\dot{\theta}}) = m l^2 \ddot{\theta} + m l \ddot{z} \cos(\theta) - m l \dot{z} \dot{\theta} \sin(\theta)
+			\label{eq:dv_pdv_L_theta_dot}
+		\end{equation}
+		
+		The Lagrange equation can then be derived using \eqref{eq:lagrange_theta_original}, \eqref{eq:pdv_L_theta}, and \eqref{eq:dv_pdv_L_theta_dot}:
+		\begin{align}
+			 \qty(m l^2 \ddot{\theta} + m l \ddot{z} \cos(\theta) - m l \dot{z} \dot{\theta} \sin(\theta)) - \qty(- m l \dot{z} \dot{\theta} \sin(\theta) + m g l \sin(\theta))= 0 \nonumber\\
+			 m l^2 \ddot{\theta} - m g l \sin(\theta) + m l \ddot{z} \cos(\theta) = 0
+			\label{eq:lagrange_theta}
+		\end{align}
+
+	\subsection{Non-linear Equations of Motion:}
+	
+		The two Lagrange equations computed were computed in \eqref{eq:lagrange_Z} and \eqref{eq:lagrange_theta}:
+		\begin{align}
+			(M+m)\ddot{z} + m l \qty(\ddot{\theta}\cos(\theta) - \dot{\theta}^2\sin(\theta)) &= f  \tag{\ref{eq:lagrange_Z}}\\
+			m l^2 \ddot{\theta} - m g l \sin(\theta) + m l \ddot{z} \cos(\theta) &= 0
+			\tag{\ref{eq:lagrange_theta}}
+		\end{align}
+
+	\subsection{Linearized Model}
+		Derive a linearized model at the upright equilibrium point using the following approximations:
+		\begin{align*}
+			\cos(\theta) 	&\approx 1\\
+			\sin(\theta) 	&\approx \theta\\
+			\dot{z}^2		&\approx 0\\
+			\dot{\theta}^2  &\approx 0
+		\end{align*}
+		
+			From \eqref{eq:lagrange_Z}, the following can be derived:
+			\begin{align}
+				(M+m)\ddot{z} &= f -ml \qty(\ddot{\theta}\cancelto{1}{\cos{\theta}} - \cancelto{0}{\dot{z}^2}\cancelto{\theta}{\sin{\theta}} ) \nonumber\\
+				\ddot{z} &= \frac{f -ml \ddot{\theta}}{M+m} \label{eq:z_lin_init}
+			\end{align}
+		
+			From \eqref{eq:lagrange_theta}, the following can be derived:
+			\begin{align}
+				m l^2 \ddot{\theta} &= m g l \cancelto{\theta}{\sin{\theta}} - m l \ddot{z} \cancelto{1}{\cos{\theta}} \nonumber\\
+				\ddot{\theta} &= \frac{g\theta -\ddot{z}}{l} \label{eq:theta_lin_init}
+			\end{align}
+			
+			By substituting \eqref{eq:theta_lin_init} into \eqref{eq:z_lin_init}, the following can be obtained:
+			\begin{align}
+				\ddot{z} &= \frac{f -m\bcancel{l} \qty(\cfrac{g\theta-\ddot{z}}{\bcancel{l}})}{M+m} \nonumber\\
+				\ddot{z} \qty(1-\frac{m}{M+m}) &= \frac{f - mg\theta}{M+m} \nonumber\\
+				\ddot{z} &= \frac{f-mg\theta}{\qty(1-\cfrac{m}{M+m}) \qty(M+m)} \nonumber\\
+				\ddot{z} &= \frac{f-mg\theta}{M} \label{eq:z_lin}
+			\end{align}
+			
+			\eqref{eq:theta_lin_init} can then rewritten as:
+			\begin{align}
+				\ddot{\theta} &= \frac{g\theta -\qty(\cfrac{f-mg\theta}{M})}{l} \nonumber\\
+				\ddot{\theta} &= \frac{(m+M)g\theta - f}{Ml} \nonumber\\
+				\ddot{\theta} &= \frac{(m+M)g\theta}{Ml} - \frac{f}{Ml} \label{eq:theta_lin}
+			\end{align}
+
+	\subsection{Standard State-Variable Format}
+		Put the system into standard variable form:
+		\begin{equation}
+			\begin{aligned}
+				\dot{\vb*{x}} &= A \vb*{x} + B \vb*{u}\\
+				\vb*{y} &= C \vb*{x} + D \vb*{u}
+			\end{aligned} \label{eq:state_eq_def}
+		\end{equation}
+		
+		where $\vb*{x}$ is the following state vector:
+		\begin{equation}
+			\vb*{x} = \mqty[z \\ \dot{z} \\ \theta \\ \dot{\theta}] \label{eq:state_var}
+		\end{equation}
+	
+		the output $\vb*{y}$ is defined as:
+		
+		\begin{equation}
+			\vb*{y} = \mqty[z \\ \theta]
+		\end{equation}
+		
+		and the input $\vb*{u}$ is defined as:
+		\begin{equation}
+			\vb*{u} = f
+		\end{equation}
+		
+		The state-equations and  linearized equations \eqref{eq:z_lin} and \eqref{eq:theta_lin} can be used to generate the following state-variable equations:
+		\begin{equation}
+			\begin{aligned}
+				\dot{z} &= \vb*{x}[2]\\
+				\ddot{z} & = \frac{-mg}{M}\vb*{x}[3] + \frac{1}{M} \vb*{u}[1]\\
+				\dot{\theta} & = \vb*{x}[4]\\
+				\ddot{\theta} & = \frac{(m+M)g}{Ml}\vb*{x}[3] - \frac{1}{Ml} \vb*{u}[1]\\
+				\\
+				\vb*{y}[1] &= z = \vb*{x}[1]\\
+				\vb*{y}[2] &= \theta = \vb*{x}[3]
+			\end{aligned}
+			\label{eq:state_eq_init}
+		\end{equation}
+		
+		From the state-equations \eqref{eq:state_eq_init}, the following state-matrices can be derived:
+		\setstretch{1.2}
+		\begin{equation}
+			\begin{aligned}
+				&A = \mqty[	0 & 1 & 0 & 0\\
+							0 & 0 & \cfrac{-mg}{M} & 0\\
+							0 & 0 & 0 & 1\\
+							0 & 0 & \cfrac{(m+M)g}{Ml}	& 0]
+				&B = \mqty[	0\\
+							\cfrac{1}{M}\\
+							0\\
+							\cfrac{-1}{Ml}] \\ \\
+				&C = \mqty[	1 & 0 & 0 & 0\\
+							0 & 0 & 1 & 0]
+				&D = 0
+			\end{aligned}
+			\label{eq:state_matrices}
+		\end{equation}
+		\setstretch{1}
+	
+	\subsection{Design Application 1 Background}
+		Design Application 1 describes a DC motor with a load. The system consists of a DC motor with an inertial load, $J$, that converts a voltage input, $e$, into a radial position, $\theta$.
+		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.7\linewidth]{Fig/DesignApplication1}
+			\caption{DC Motor with Load Diagram}
+			\label{fig:designapplication1}
+		\end{figure}
+		
+		The following parameters are defined to describe the DC motor and load operation:
+		\begin{align*}
+			J &\equiv \text{Inertial Load}\\
+			R &\equiv \text{Armature Resistance}\\
+			K_1 &\equiv \text{Torque-Current Motor Constant}\\
+			K_2 &\equiv \text{Voltage-Speed Motor Constant}
+		\end{align*}
+		
+		The two primary State variables are defined as:
+		\begin{align*}
+			e &\equiv \text{Voltage Input}\\
+			\theta &\equiv \text{Radial Position}
+		\end{align*}
+		
+		Additional variables are defined as:
+		\begin{align*}
+			\tau 	&\equiv \text{Torque}\\
+			i		&\equiv \text{Input Current}\\
+			v 		&\equiv \text{Back EMF Voltage}\\
+			\omega	&\equiv \text{Output Rotational Velocity}
+		\end{align*}
+		
+		Given the physics of a DC brushed motor, the following relationships exist:
+		\begin{align}
+			\tau &= K_1 i \label{eq:tau_i_rel}\\
+			v &= K_2 \omega \label{eq:v_omega_rel}\\
+		\end{align}
+		
+		Additionally, with the assumption of 100\% \ efficiency, the following can be stated:
+		\begin{align}
+			k = K_1 &= K_2 \label{eq:K1_K2}
+		\end{align}
+		
+		From Ohm's Law, the following is known:
+		\begin{align}
+			e - v &= Ri \nonumber\\
+			i &= \frac{e-v}{R} \label{eq:armature_Ohms}
+		\end{align}
+		
+		From rotational dynamics it is also known that:
+		\begin{align}
+			\tau &= J \dot{\omega} \label{eq:tau_omega_rel}\\
+			\dot{\theta} &= \omega \label{eq:omega_def}
+		\end{align}
+		
+		By equating \eqref{eq:tau_i_rel} and \eqref{eq:tau_omega_rel}, and then substituting \eqref{eq:armature_Ohms} and \eqref{eq:v_omega_rel}, the following can be derived:
+		\begin{align}
+			 J \dot{\omega}	&= \tau = K_1 i \nonumber\\
+			 J \dot{\omega}	&= K_1 \qty(\frac{e-v}{R}) \nonumber\\
+			 J \dot{\omega}	&= \frac{K_1 \qty(e - \qty(K_2 \omega))}{R} \nonumber\\
+			 \dot{\omega}	&= \frac{K_1}{JR} e - \frac{K_1 K_2}{JR} \omega \label{eq:omega_state_eq}
+		\end{align}
+		
+		The two state equations, \eqref{eq:omega_def} and \eqref{eq:omega_state_eq}, can then be rewritten in the standard state variable format:
+		\begin{align}
+			\mqty[	\dot{\theta}\\
+					\dot{\omega}]
+					&= \mqty[	0	&1\\
+								0	&-\frac{K_1 K_2}{J R}]
+						\mqty[	\theta\\
+								\omega]
+						+ \mqty[0\\
+								\frac{K_1}{J R}] e \label{eq:DesignApp2_state_eq}
+		\end{align}
+	
+	\subsection{Implementation Into Cart}\label{sec:p4_2}
+		The electric motor can be introduced into the inverted pendulum cart by relating the output torque to the force excreted at the wheels.
+		
+		The relationships between rotational and linear movement are defined as:
+		\begin{align}
+			z &= r \theta \label{eq:z_theta_rel}\\
+			\dot{z} &= r \omega \label{eq:zdot_omega_rel}\\
+			f &= \frac{\tau}{r} \label{eq:f_tau_rel}
+		\end{align}
+		where $r$ is the radius of the wheel.
+		
+		Using the primary state equation for the DC motor, \eqref{eq:omega_state_eq}, torque output from the motor can be derived as:
+		\begin{align}
+			\tau &= J \dot{\omega} = \frac{K_1}{R} e - \frac{K_1 K_2}{R} \omega \label{eq:torque_eq}
+		\end{align}
+		
+		Using the assumption \eqref{eq:K1_K2} and the relationships \eqref{eq:z_theta_rel}, \eqref{eq:zdot_omega_rel}, and \eqref{eq:f_tau_rel}, \eqref{eq:torque_eq} can be converted to the linear equivalent:
+		\begin{align}
+			f r &= \frac{k}{R} e - \frac{k^2}{R} \frac{\dot{z}}{r} \nonumber\\
+			f &= \frac{k}{R r} e - \frac{k^2}{r^2} \dot{z} \label{eq:f_def}
+		\end{align}
+		
+		This can then be substituted into \eqref{eq:z_lin} and \eqref{eq:theta_lin} to create the overall system equations of motion:
+		\begin{align}
+			\ddot{z} &= - \frac{mg}{M} \theta + \frac{1}{M} \qty(\frac{k}{Rr}e - \frac{k^2}{R r^2} \dot{z}) \label{eq:z_pend_eq}\\
+			\ddot{\theta} &= \frac{(M+m)g}{M l} \theta - \frac{1}{M l} \qty(\frac{k}{R r} e - \frac{k^2}{R r^2}\dot{z}) \label{eq:theta_pend_eq}
+		\end{align}
+	
+		These new equations of motion can then be adapted to the standard state-space representation as described in \eqref{eq:state_eq_def} as shown:
+		\setstretch{1.2}
+		\begin{equation}
+			\begin{aligned}
+				&A = \mqty[	0 & 1 					& 0 					& 0\\
+							0 & \cfrac{-k^2}{MRr^2}	& \cfrac{-mg}{M} 		& 0 \\
+							0 & 0 					& 0 					& 1\\
+							0 & \cfrac{k^2}{MlRr^2}	& \cfrac{(m+M)g}{Ml}	& 0	]
+				&B = \mqty[	0\\
+							\cfrac{k}{MRr}\\
+							0\\
+							\cfrac{-k}{MlRr}] \\ &&\\
+				&C = \mqty[	1 & 0 & 0 & 0\\
+							0 & 0 & 1 & 0]
+				&D = 0
+			\end{aligned}
+			\label{eq:pendulum_state_matrices}
+		\end{equation}
+		\setstretch{1}
+	
+	\subsection{Numerical Implementation}
+		\subsubsection{State-Variable Descriptions}
+			A numerical state variable description of the system can be calculated using the state-matricies from \eqref{eq:state_matrices} and substituting in the following numerical parameters:
+			\begin{align*}
+				&m = 0.2 \ \text{kg} \\
+				&M = 1.0 \ \text{kg} \\
+				&l = 1.0 \ \text{m} \\
+				&g = 9.8 \ \text{m/s\textsuperscript{2}} \\
+				&k = 2.0 \ \text{v-s} \\
+				&R = 50  \ \Omega \\
+				&r = 0.01 \ \text{m}
+			\end{align*}
+			
+			The numerical state-variable description is calculated to be:
+			\begin{equation}
+				\begin{aligned}
+					&A = \mqty[	0 & 1 	& 0 	& 0\\
+								0 & -8	& -1.96 & 0 \\
+								0 & 0	& 0 	& 1\\
+								0 & -8	& 11.76	& 0	]
+					&B = \mqty[	0\\
+								0.4\\
+								0\\
+								-0.4] \\ && \\
+					&C = \mqty[	1 & 0 & 0 & 0\\
+								0 & 0 & 1 & 0]
+					&D = 0
+				\end{aligned}
+				\label{eq:pendulum_state_matrices}
+			\end{equation}
+		
+		\subsubsection{Characteristic Polynomial}
+			
+			The characteristic polynomial contains vital information of the systems dynamics and its roots are the poles of the system.
+			
+			\begin{equation}
+				\begin{aligned}
+					\Delta (s) 	&= \det(s I - A)\\
+								&= 25s^4 + 20000s^3 - 294s^2 - 196000s\\
+								&= s (s-3.1317) (s + 3.1293) (s + 800)
+				\end{aligned}
+				\label{eq:pendulum_Delta(s)}
+			\end{equation}
+		
+		\newpage
+		\subsubsection{State Transition Matrix}
+			The state transition matrix, $e^{At}$, is a very important matrix for modeling dynamical systems. The equivalent in the Laplace domain formed from state-space matrices is computed as $(sI - A)^{-1}$:
+			
+			\setstretch{1.5}
+			\begin{equation}
+				\begin{aligned}
+					&(sI - A)^{-1} = \cfrac{1}{25s^4 + 20000s^3 - 294s^2 - 196000s} \\
+					&\ *\mqty[	25 s^3 + 20000 s^2 - 294 s - 196000 & 25 s^2 - 294   & -49 s             & -49              \\
+					                                  0 & 25 s^3 - 294 s & -49 s^2           & -49 s           \\
+					                                  0 & 20000 s        & 25 s^2 (s + 800)  & 25 s (s + 800)   \\
+					                                  0 & 20000 s^2      & 98 s (3 s + 2000) & 25 s^2 (s + 800)
+					]
+				\end{aligned}
+				\label{eq:pendulum_(sI-A)-1}
+			\end{equation}
+			\setstretch{1}
+		
+		\subsubsection{Transfer Function Calculation}
+			The transfer functions of a state-space system can be calculated using the following equation:
+			\begin{equation}
+				H(s) = C (sI-A)^{-1} B + D
+				\label{eq:tf_def}
+			\end{equation}
+			
+			For the state-space model calculated for the Inverted Pendulum system, \eqref{eq:pendulum_state_matrices}, the Transfer Function matrix is defined as:
+			
+			\setstretch{1.5}
+			\begin{equation}
+				H(s) = \mqty[	\cfrac{4 s^2 + 3.553e-15 s - 39.2}{s^4 + 800 s^3 - 11.76 s^2 - 7840 s}\\
+								\cfrac{-4 s}{s^3 + 800 s^2 - 11.76 s - 7840}
+								]
+				\label{eq:pendulum_H(s)}
+			\end{equation}
+			\setstretch{1}
+			
+		\subsubsection{Stability of the System}
+			The stability of any linear system can be determined by the roots of the characteristic polynomial \eqref{eq:pendulum_Delta(s)}. In order to be asymptotically stable, the roots of the charictoristic polynomial (the poles) must all be on the LHP ($\real(\lambda_i) < 0 \  \forall \ i = 1, \dots, n)$. The inverted pendulum itself is clearly unstable due to the root on the right-half plane: $(s-3.1317)$
+	
+	\newpage
+	\subsection{System Controllability}
+		The controllability of the inverted pendulum system can be tested by testing whether the controllability matrix $\ctrbl$ has rank $n$.
+		
+		The controllability matrix can be computed as the following:
+		
+		\begin{align}
+			\ctrbl &= \mqty[B & AB & A^2B & A^3 B]
+		\end{align}
+		
+		Since $\rank(\ctrbl) = 4$, the inverted pendulum system is controllable.
+
+	\subsection{System Observability}
+		By redefining the output equation based on an arbitrary $C$ matrix, the observability of the inverted pendulum system can be determined for various measurement combinations.\\
+		
+		Let the state-space model be defined by the $A$ and $B$ matrices for the Inverted Pendulum system, \eqref{eq:pendulum_state_matrices}, and the redefined output equation:
+		\begin{equation}
+			y = C x \label{eq:generalOutputdef}
+		\end{equation}
+		
+		The rank of the Observability Matrix defined as:
+		\begin{equation}
+			\obsv = \mqty[C\\ CA\\ CA^2\\ CA^3] \label{eq:Vdef}
+		\end{equation}
+		
+		can then be used to determine whether the pair $(C, A)$ is an observable pair.
+		
+		In the case where both cart position and pendulum angle is measured, $\rank(\obsv) = 4$ so the system is observable.
+		
+% The following is from an assignment... but is actually incorrect!!!! the values are all wrong but conclusions are correct
+		
+%		\subsubsection{Cart Displacement Measurement Only}
+%			
+%			Let $C$ be defined as:
+%			\begin{equation}
+%				C_1 = \mqty[1	&0	&0	&0]
+%			\end{equation}
+%		
+%			The Observability matrix can then be calculated using \eqref{eq:Vdef}:
+%			\begin{equation}
+%				\obsv_1 = \mqty[C\\ CA\\ CA^2\\ CA^3]
+%					= \mqty[1	&0	&0		&0\\
+%							0	&1	&0		&0\\
+%							0	&-8	&-1.96	&0\\
+%							0	&60	&15.68	&-1.96] \label{eq:v1def}
+%			\end{equation}
+%		
+%			Clearly, $\det(V_1) = 3.84 \neq 0$, as such $V_1$ is full rank. Thus, the system is fully observable when only measuring the cart displacement.
+%		
+%		\subsubsection{Pendulum Angle Measurement Only}
+%			Let $C$ be defined as:
+%			\begin{equation}
+%				C_2 = \mqty[0	&0	&1	&0]
+%			\end{equation}
+%			
+%			The Observability matrix can then be calculated using \eqref{eq:Vdef}:
+%			\begin{equation}
+%				\obsv_2 = \mqty[C\\ CA\\ CA^2\\ CA^3]
+%				= \mqty[0	&0	&1		&0\\
+%						0	&0	&0		&1\\
+%						0	&-8	&11.76	&0\\
+%						0	&64	&15.68	&11.76] \label{eq:v2def}
+%			\end{equation}
+%			
+%			Clearly, $\det(V_2) = 0$, as such $V_2$ is not full rank. Thus, the system is not fully observable when only measuring the pendulum angle.
+%		
+%		\subsubsection{Cart Velocity Measurement Only}
+%			Let $C$ be defined as:
+%			\begin{equation}
+%				C_3 = \mqty[0	&1	&0	&0]
+%			\end{equation}
+%			
+%			The Observability matrix can then be calculated using \eqref{eq:Vdef}:
+%			\begin{equation}
+%				\obsv_3 = \mqty[C\\ CA\\ CA^2\\ CA^3]
+%				= \mqty[0	&1		&0		&0\\
+%						0	&-8		&-1.96	&0\\
+%						0	&64		&15.68	&-1.96\\
+%						0	&-496	&-148	&15.68]\label{eq:v3def}
+%			\end{equation}
+%			
+%			Clearly, $\det(V_3) = 0$, as such $V_3$ is not full rank. Thus, the system is not fully observable when only measuring the cart velocity.
+%			
+%			
+%		\subsubsection{Cart Velocity and Pendulum Angle measurement}
+%			Let $C$ be defined as:
+%			\begin{equation}
+%				C_4 = \mqty[0	&1	&0	&0\\
+%							0	&0	&1	&0]
+%			\end{equation}
+%			
+%			The Observability matrix can then be calculated using \eqref{eq:Vdef}:
+%			\begin{equation}
+%				\obsv_4 = \mqty[C\\ CA\\ CA^2\\ CA^3]
+%					= \mqty[0	&1		&0		&0\\
+%							0	&0		&1		&0\\
+%							0	&-8		&-1.96	&0\\
+%							0	&0		&0		&1\\
+%							0	&64		&15.7	&-1.96\\
+%							0	&-8		&11.76	&0\\
+%							0	&-496	&-148.49&15.68\\
+%							0	&64		&15.68	&11.76] \label{eq:v4def}
+%			\end{equation}
+%			
+%			Since the entire first column of $V_4$ is zero, $V_4$ may not be full rank. Thus, the system is not fully observable when measuring the cart velocity and pendulum angle.
+	
+	\newpage
+	\subsection{Similarity Transforms}
+		Equivalent systems can be useful in order obtain information from a system or to make it easier to design such systems. This section includes various equivalent that are used to perform tests and design feedback and observer systems.
+		
+		\subsubsection{Controllable Conical Form}
+			This equivalent system is useful for control design and is structured in a way that easily is identifiable as the transfer function coeficents, which results in:
+			
+			\begin{equation}
+				\begin{aligned}
+					&A = \mqty[	0 & 1 & 0 & 0 \\
+								0 & 0 & 1 & 0 \\
+								0 & 0 & 0 & 1 \\
+								0 & 7840 & 11.76 & -800]
+					&B = \mqty[	0\\ 0\\ 0\\ 1] \\ && \\
+					&C = \mqty[	-39.2	&0	&4	&0\\
+								0 		&0	&-4	&0]
+					&D = 0
+				\end{aligned}
+				\label{eq:pendulum_ctbl_conical_form}
+			\end{equation}
+			
+			
+			The system can be transformed into controllable conical form by using the characteristic polynomial \eqref{eq:pendulum_Delta(s)} and controllability matrix \eqref{eq:pendulum_cntrl_matrix}. First, the inverse of the controllability matrix for the controllable conical form $\bar{\ctrbl}^{-1}$ can be constructed as follows:
+			
+			\begin{equation}
+				\bar{\ctrbl}^{-1} 	= \mqty[\alpha_3 & \alpha_2 & \alpha_1 & 1 \\
+				\alpha_2 & \alpha_1 & 1 & 0 \\
+				\alpha_1 & 1 & 0 & 0 \\
+				1 & 0 & 0 & 0]
+			\end{equation}
+			
+			The $Q = P^{-1}$ matrix can then be formed as follows:
+			
+			\begin{equation}
+				\begin{aligned}
+					Q = P^{-1}	&= \ctrbl \bar{\ctrbl}^{-1}\\
+						P^{-1}	&= \mqty[	-39.2	&0		&4	&0\\
+											0		&-39.2	&0	&4\\
+											0		&0		&-4	&0\\
+											0		&0		&0	&-4]
+				\end{aligned}
+			\end{equation}
+			
+			
+	\newpage
+	\subsection{State Feedback Control}
+		\label{sec:PSD_pblm1}
+		In order to effectively control the inverted pendulum system, a static state feedback can be setup to control the pendulum at its unstable upright equilibrium.
+	
+		Next a gain matrix must be found. Given the following dominant poles, a gain matrix can be found to control the inverted pendulum system effectively.
+		
+		\begin{equation}
+			\lambda_{1,2,3,4} = {-4, -2 \pm j 2 \sqrt{3}, -800}
+			\label{eq:Desiered_poles}
+		\end{equation}
+	
+		The ideal $\Delta_{cls} (s)$ can be calculated by the following:
+		\begin{equation}
+			\begin{aligned}
+				\Delta_{cls} (s) &= (s + \lambda_1) (s + \lambda_2) (s + \lambda_3)(s+\lambda_4)\\
+								&= (s + 4) (s + 2 -j 2 \sqrt{3}) (s+2 + j 2 \sqrt{3})(s+800)\\
+								&\approx s^4 + 808 s^3 + 6432 s^2 + 25664 s + 51200\\
+								&= s^4 + \bar{\alpha_1} s^3 + \bar{\alpha_2} s^2 + \bar{\alpha_3} s + \bar{\alpha_4}
+			\end{aligned} \label{eq:ideal_char_poly}
+		\end{equation}
+		
+		Given the control law of $u = - K x$, the system can be stabilized using a matrix $K$ that satisfies the following:
+		
+		\begin{equation}
+			\det(A - B K) = \Delta_{cls} (s)
+		\end{equation}
+		
+		This can be done explicitly using akerman's formula with the controllable conical form and then converting to the actual system. The ackerman's formula defines the gain matrix to be the following for the conical form:
+
+		\begin{equation}
+			\begin{aligned}
+				\hat{K} &= \mqty[\alpha_4 - \bar{\alpha_4} & \alpha_3 - \bar{\alpha_3} & \alpha_2 - \bar{\alpha_2} & \alpha_1 - \bar{\alpha_1}]\\
+						&= \mqty[-51200	&-33504	&-6444	&-8]
+			\end{aligned}
+		\end{equation}
+		
+		This can then be converted to the gain matrix:
+		
+		\begin{equation}
+			\begin{aligned}
+				K &= \hat{K} P \approx \mqty[1306.1	&854.7	&2917.1	&856.7] 
+			\end{aligned}
+		\end{equation}
+		
+		By adding a reference signal $r$ for position of system, the control law can be defined by the following:
+		
+		\begin{equation}
+			u = r - K x
+		\end{equation}
+	
+	
+	\newpage
+	\subsection{State Observer Design}
+		A state observer is important for estimating the states of a system when not every state is measured directly (or to minimize measurement error of the states). It is important to note that although an observer can be used to estimate states not measured directly, it can only be used to estimate the observable modes.
+		
+		A Luemberger Observer is an estimator that uses the input and estimated states of the system to predict what the system response should be and compare it with the output to ultimately produce an improved estimate of the states of the system. The observer is defined by the following state equation:
+		
+		\begin{equation}
+			\begin{aligned}
+				\hat{x} &= A \hat{x} + D u + L \qty(y - C \hat{x})\\
+						&= \qty(A - L C) \hat{x} + L y + B u
+			\end{aligned}
+			\label{eq:luemberger_observer}
+		\end{equation}
+		
+		where $L$ is the Luemberger gain matrix and $\qty(A - LC)$ defines the observer dynamics. Similar design techniques to State feedback can then be used to design an observer with desired response characteristics.
+		
+		\subsubsection{Problem 1: Full-Order Observer}
+			
+		 	Consider a full-order observer designed as a 4th order Butterworth filter. The characteristic polynomial is then given as:
+		 	
+		 	\begin{equation}
+		 		\begin{aligned}
+		 			\Delta_{desired} (s) &= \qty(\frac{s}{5})^4 + 2.613 \qty(\frac{s}{5})^3 + (2 + \sqrt{2}) \qty(\frac{s}{5})^2 + 2.613 \qty(\frac{s}{5}) + 1\\
+		 								&= s^4 + 13.07 s^3 + 85.36 s^2 + 326.6 s + 625\\
+		 								&= s^4 + \bar{\alpha_1} s^3 + \bar{\alpha_2} s^2 + \bar{\alpha_3} s + \bar{\alpha_4}\\
+		 								&= (s+4.62 + j 1.91)(s+4.62 - j 1.91)(s + 1.91 + j4.62)(s+1.91 - j4.62)
+		 		\end{aligned}\label{eq:full_obsv_char_poly}
+		 	\end{equation}
+	 		
+	 		The poles can then be identified as:
+	 		\begin{equation}
+	 			\begin{aligned}
+	 				\bar{\lambda}_{1,2} &= -4.62 \pm j 1.91\\
+	 				\bar{\lambda}_{3,4} &= -1.91 \pm j 4.62
+	 			\end{aligned}
+ 				\label{eq:full_obsv_poles}
+	 		\end{equation}
+	 		
+	 		The design can be achieved using the same techniques as finding the state-feedback control on the controllable duality matrix, $A^T - C^T K$, where $K = L^T$.\\
+	 		
+	 		Since the pendulum system has multiple outputs, solving for $L$ directly is difficult, so constructing a new problem to solve for matrices directly is simpler. First, an equivalent state-space system describing the observer can be defined as the following:
+	 		
+	 		\begin{equation}
+	 			\dot{z} = F z + G y + H u
+	 			\label{eq:full_order_obsv_def}
+	 		\end{equation}
+ 			
+ 			where $z = T \hat{x}$.\\
+ 			
+ 			A stable observer is then able to be developed given three conditions:
+ 			\begin{enumerate}
+ 				\item $-FT + TA = GC$
+ 				\item $H = TB$
+ 				\item $\real(\lambda_i(F)) < 0 \ \forall \ i = 1,\dots,n$
+ 			\end{enumerate}
+ 			
+ 			First, a stable $F$ is formed. In this case, the eigenvalues of $F$ must be set to the ideal poles \eqref{eq:full_obsv_poles}. The simpilest selection is to place the eigenvalue on the diagonal:
+ 			\begin{equation}
+ 				F = \mqty[\dmat[0]{-4.62 + j 1.91, -4.62 - j 1.91, -1.91 + j 4.62, -1.91 - j 4.62}]
+ 			\end{equation}
+ 			
+ 			Next, a $G$ must be selected to ensure $\{F,G\}$ is a controllable pair ($G$ is an n x p matrix). An identity equivalent matrix can be constructed for a simple design:
+ 			\begin{equation}
+ 				G = \mqty[\imat{2}\\ \imat{2}]
+ 			\end{equation}
+ 			
+ 			The controllablility must then be tested (which it is):
+ 			\begin{equation}
+ 				\begin{aligned}
+ 					\ctrbl_{obsv} &= \mqty[G & FG & F^2G & F^3G]\\
+ 					\rank(\ctrbl_{obsv}) &= 4
+ 				\end{aligned}
+ 				\label{eq:obsv_ctrl_check}
+ 			\end{equation}
+ 		
+ 			Next, the Algebraic Lyapnov Equation must be solved for $T$:
+ 			\begin{equation}
+ 				-F T + T A = G C
+ 			\end{equation}
+ 			
+ 			Next the $T$ matrix must be tested to insure it is nonsingular. In this case, $\det(T) = 0$, so a new $F$ or $G$ matrix must be selected. The new $F$ matrix was selected as:
+ 			\begin{equation}
+ 				F = \mqty[-4.62   & -1.91   & 0                 & 0                 \\
+ 				1.91    & -4.62   & 0                 & 0                 \\
+ 				0                 & 0                 & -1.91   & 4.62    \\
+ 				0                 & 0                 & -4.62   & -1.91  ]
+ 			\end{equation}
+ 			
+ 			Checking controlability again with the same results as \eqref{eq:obsv_ctrl_check}, thus $\{F,G\}$ is a controllable pair.
+ 			
+ 			The Algebraic Lyapnov Equation is then solved for $T$:
+ 			\begin{equation}
+ 				-F T + T A = G C
+ 			\end{equation}
+ 			
+ 			$T$ is found to be non-singular (although very close to it), with $\det(T) = 2.7 x 10^{-9}$. Using this $T$, the $H$ matrix is defined as:
+ 			\begin{equation}
+ 				H = T B = \mqty[-0.3068\\ -0.0018\\ 2.711\\ -1.848]
+ 			\end{equation}
+ 			
+		\newpage
+		\subsubsection{Problem 2: Reduced-Order Observer}
+			Consider a reduced-order observer designed as a 3rd order Butterworth filter. The characteristic polynomial is then given as:
+			
+			\begin{equation}
+				\begin{aligned}
+					\Delta_{desired} (s) 	&= \qty(\frac{s}{5})^3 + 2 			\qty(\frac{s}{5})^2 + 2 \qty(\frac{s}{5}) + 1\\
+					&= s^3 + 10 s^2 + 50 s + 125\\
+					&= s^3 + \bar{\alpha_1} s^2 + \bar{\alpha_2} s + \bar{\alpha_3}\\
+					&= (s + 5)(s+2.5 + j 4.33)(s+2.5 - j 4.33)
+				\end{aligned}\label{eq:reduced_obsv_char_poly}
+			\end{equation}
+			
+			The poles can then be identified as:
+			\begin{equation}
+				\begin{aligned}
+					\bar{\lambda}_{1,2} &= -2.5 \pm j 4.33\\
+					\bar{\lambda}_{3} &= -5
+				\end{aligned}
+				\label{eq:reduced_obsv_poles}
+			\end{equation}
+			
+			Similarly to the full-order observer, an equivalent system can be constructed as:
+			
+			\begin{equation}
+				\dot{z} = F z + G y + H u
+			\end{equation}
+			
+			where $z = \hat{x}_{unobserved}$.\\
+			
+			
+			First, a stable $F$ is formed. In this case, the eigenvalues of $F$ must be set to the ideal poles \eqref{eq:reduced_obsv_poles}. The simplest selection is to place the eigenvalue on the diagonal, but given how the first $F$ for the full-observer resulted in a singular $T$, the following $F$ was constructed instead:
+			\begin{equation}
+				F = \mqty[	-4.62  &  -1.91    &    0 \\
+							1.91  &  -4.62     &   0  \\
+							0   &     0   &    -5]
+			\end{equation}
+			
+			Next, a $G$ must be selected to ensure $\{F,G\}$ is a controllable pair ($G$ is an n x p matrix). An identity equivalent matrix can be constructed for a simple design:
+			\begin{equation}
+				G = \mqty[1\\1\\1]
+			\end{equation}
+			
+			The controllablility must then be tested (which it is):
+			\begin{equation}
+				\begin{aligned}
+					\ctrbl_{obsv} &= \mqty[G & FG & F^2G]\\
+					\rank(\ctrbl_{obsv}) &= 3
+				\end{aligned}
+				\label{eq:obsv_ctrl_check}
+			\end{equation}
+			
+			Next, the Algebraic Lyapnov Equation must be solved for $T$:
+			\begin{equation}
+				-F T + T A = G C
+			\end{equation}
+			
+			This results in a $T$ defined as:
+			\begin{equation}
+				T = \mqty[0.108 & 1.6e-4 & -6.4e-5 & 2.47e-5  \\
+				0.26  & 3.0e-4 & 1.68e-4 & -2.6e-5  \\
+				0.2   & 2.2e-4 & 1.62e-4 & -3.24e-5]
+			\end{equation}
+			
+			$T$ is found to be non-singular (although very close to it), with $\det(T) = -1.5630e-13$. Using this $T$, the $H$ matrix is defined as:
+			\begin{equation}
+				H = T B = \mqty[0.0005\\0.0013\\0.0010]
+			\end{equation}
+			
+			The reduced order obaserver can then be constructed as:
+			\begin{equation}
+				\begin{aligned}
+					\dot{z} &= F z + G y + H u\\
+					\hat{x}	&= \mqty[C\\T]^{-1} \mqty[y\\z]
+				\end{aligned}
+			\end{equation}
+ 			
+	 			 		
+	 			 		
+	 			 		
+	 			 		
+	 			 		
+% notes and things for SISO sytems... not applicable	 			 		
+
+%	 		First, the gain matrix can selected based on the two characteristic polynomials, \eqref{eq:pendulum_Delta(s)} and \eqref{eq:full_obsv_char_poly}:
+%	 		
+%	 		\begin{equation}
+%	 			\begin{aligned}
+%	 				\hat{K} &= \mqty[\alpha_4 - \bar{\alpha_4} & \alpha_3 - \bar{\alpha_3} & \alpha_2 - \bar{\alpha_2} & \alpha_1 - \bar{\alpha_1}]\\
+%	 						&= \mqty[0 - 625 & 78.4 - 326.6 & ]
+%	 			\end{aligned}
+%	 		\end{equation}
+% 		
+% 			Referring back to the controllable conical form and similarity transform matrices, \eqref{eq:pendulum_ctbl_conical_form}, $L$ can then be calculated as:
+% 			
+%	 		
+%	 		**** Note that the math above still isn't right...
+%	 		
+%	 		\begin{equation}
+%	 			L = K^T = \mqty[test ]
+%	 		\end{equation}
+ 			
+ 			
+ 			
+	
+	
+					
+\newpage
+\section{Coupled Cart System}
+	\subsection{Design Application 3 Background}
+		Design Application 3 describes a system of two coupled carts. The system consists of two carts of mass $M_1$ and $M_2$ that are connected by a spring with constant $K$.
+		Nothing 
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.7\linewidth]{Fig/DesignApplication3}
+			\caption{Coupled Carts Figure}
+			\label{fig:designapplication3}
+		\end{figure}
+		
+		The following parameters are defined to describe the DC motor and load operation:
+		\begin{align*}
+			M_1 &\equiv \text{Mass of Cart 1}\\
+			M_2 &\equiv \text{Mass of Cart 2}\\
+			K &\equiv \text{Spring Constant}
+		\end{align*}
+		
+		The two primary state variables are defined as:
+		\begin{align*}
+			z_1 &\equiv \text{Cart 1 Position}\\
+			z_2 &\equiv \text{Cart 2 Position}
+		\end{align*}
+		
+		The two inputs are defined as:
+		\begin{align*}
+			F_1 &\equiv \text{Cart 1 Force}\\
+			F_2 &\equiv \text{Cart 2 Force}
+		\end{align*}
+		
+		The Lagrangean of the system containing no potential energy is defined solely by the total kinetic energy:
+		\begin{align}
+			L &= \frac{1}{2} \qty(M_1 \dot{z_1}^2 + M_2 \dot{z_2}^2) \label{eq:carts_lagrange}
+		\end{align}
+		
+		Additionally, the force on excreted by the spring on each cart is equal and opposite:
+		\begin{align}
+			F_s &= K(z_2 - z_1) = F_{s1} = F_{s2} \label{eq:spring_force}
+		\end{align}
+		
+		The lagrangian equations for $z_1$ and $z_2$ can then be defined as:
+		\begin{align}
+			\dv{t}\qty(\pdv{L}{\dot{z_1}}) - \pdv{L}{z_1} &= F_1 + F_s \label{eq:carts_lagrange_eq1}\\
+			\dv{t}\qty(\pdv{L}{\dot{z_2}}) - \pdv{L}{z_2} &= F_2 - F_s \label{eq:carts_lagrange_eq2}
+		\end{align}	
+		
+		The dynamics can then be easily calculated from \eqref{eq:carts_lagrange_eq1} and \eqref{eq:carts_lagrange_eq2} as:
+		\begin{align}
+			M_1 \ddot{z_1} &= F_1 + K(z_2 - z_1) \label{eq:carts_state_eq1}\\
+			M_2 \ddot{z_2} &= F_2 - K(z_2 - z_1) \label{eq:carts_state_eq2}
+		\end{align}
+		
+	\subsection{Integration of Motors}
+		Integration of motors into the coupled carts system can be done by relating the output torque of the motors to the force excreted by the wheels of each cart.\\
+		
+		First, the following parameters for the motors can be defined as:
+		\begin{align*}
+			k_i &\equiv \text{Motor Torque Constant}\\
+			R_i &\equiv \text{Motor Armature Resistance}\\
+			r_i &\equiv \text{Motor Tourque-Force Relationship}\\
+		\end{align*}
+		
+		The following variables are also defined for each motor:
+		\begin{align*}
+			\tau_i &\equiv \text{Motor Output Torque}\\
+			f_i &\equiv \text{Motor Output Force}\\
+			e_i &\equiv \text{Motor Applied Voltage}
+		\end{align*}
+		
+		From calculations done in \sectionname \ \ref{sec:p4_2}, specifically \eqref{eq:f_def}, it is known that for each motor:
+		\begin{align}
+			F_i &= \frac{k_i}{R_i r_i} e_i - \frac{k_i^2}{R_i r_i^2} \dot{z_i} \label{eq:carts_f_def}
+		\end{align}
+
+		
+	\subsection{Cart Dynamics}
+		The dynamics of the first cart can be described by substituting \eqref{eq:carts_f_def} into \eqref{eq:carts_state_eq1}:
+		\begin{align}
+			M_1 \ddot{z_1} &= \frac{k_1}{R_1 r_1} e_1 - \frac{k_1^2}{R_1 r_1^2} \dot{z_1} + K(z_2 - z_1) \nonumber\\
+			\ddot{z_1} &= -\frac{K}{M_1} z_1 + \frac{K}{M_1} z_2 - \frac{k_1^2}{M_1 R_1 r_1^2} \dot{z_1} + \frac{k_1}{M_1 R_1 r_1} e_1
+		\end{align}
+	
+		The dynamics of the second cart can be described by substituting \eqref{eq:carts_f_def} into \eqref{eq:carts_state_eq2}:
+		\begin{align}
+			M_2 \ddot{z_2} &= \frac{k_2}{R_2 r_2} e_2 - \frac{k_2^2}{R_2 r_2^2} \dot{z_2} - K(z_2 - z_1) \nonumber\\
+			\ddot{z_2} &= \frac{K}{M_2} z_1 - \frac{K}{M_2} z_2 - \frac{k_2^2}{M_2 R_2 r_2^2} \dot{z_2} + \frac{k_2}{M_2 R_2 r_2} e_2
+		\end{align}
+	
+		With the state vector, $x$, and input vector, $u$, defined as:
+		\begin{align}
+			x &= \mqty[z_1\\ z_2\\ \dot{z_1}\\ \dot{z_2}] \label{eq:carts_x_def}\\
+			\nonumber\\
+			u &= \mqty[e_1\\ e_2] \label{eq:carts_u_def}
+		\end{align}
+		
+		the state equations can be defined as:
+		\begin{equation}\label{eq:carts_state_eqs}
+			\begin{aligned}
+				\dot{x}[1] &= x[3]\\
+				\dot{x}[2] &= x[4]\\
+				\dot{x}[3] &= -\frac{K}{M_1} x[1] + \frac{K}{M_1} x[2] - \frac{k_1^2}{M_1 R_1 r_1^2} x[3] + \frac{k_1}{M_1 R_1 r_1} u[1]\\
+				\dot{x}[4] &= \frac{K}{M_2} x[1] - \frac{K}{M_2} x[2] - \frac{k_2^2}{M_2 R_2 r_2^2} x[4] + \frac{k_2}{M_2 R_2 r_2} u[2]
+			\end{aligned}
+		\end{equation}
+
+	\subsection{Output Equation}
+		The output equation is a function of the state vector and is not directly dependent on the input. With the output vector, $y$, defined as:
+		\setstretch{1.25}
+		\begin{align}
+			y &= \mqty[z_1\\ z_2]\label{eq:carts_y_def}
+		\end{align}
+		\setstretch{1}
+		
+		the output equations can be defined as:
+		\begin{equation}\label{eq:carts_y_ouput_eqs}
+			\begin{aligned}
+				y[1] &= x[1]\\
+				y[2] &= x[2]
+			\end{aligned}
+		\end{equation}
+	
+	\subsection{State-Space Matrix Formulation}
+		The coupled carts system can be put in the standard state-space formulation:
+		\begin{equation}\label{eq:state_space_eqs_def}
+			\begin{aligned}
+				\dot{x} &= A x + B u\\
+				y &= C x + D u
+			\end{aligned}
+		\end{equation}
+		 
+		 by defining the state matrices based on \eqref{eq:carts_state_eqs} and \eqref{eq:carts_y_ouput_eqs}.
+		 \begin{equation}
+ 			\begin{aligned}
+		 		A = \mqty[	0	& 0			& 1					& 0\\
+					 		0	& 0	 		& 0					& 1\\
+					 		-\cfrac{K}{M_1}	& \cfrac{K}{M_1}	& -\cfrac{k_1^2}{M_1 R_1 r_1^2}	& 0\\
+					 		\cfrac{K}{M_2}	& -\cfrac{K}{M_2}	& 0								& -\cfrac{k_2^2}{M_2 R_2 r_2^2}
+					 		] \ \ \
+		 		&B = \mqty[ 0						& 0\\
+					 		0						& 0\\
+					 		\cfrac{k_1}{M_1 R_1 r_1}	& 0\\
+					 		0						& \cfrac{k_2}{M_2 R_2 r_2}
+					 		]\\
+		 		C = \mqty[\dmat[0]{1,1}] \ \ \
+		 		&D = \mqty[\zmat{2}{2}]
+		 	\end{aligned}
+	 		\label{eq:carts_state_matrices}
+		 \end{equation}
+	
+	\subsection{Numerical State-Variable Description}
+		A numerical state variable description of the system can be calculated using the state-matricies from \eqref{eq:state_matrices} and substituting in the following numerical parameters:
+		\begin{align*}
+			M_1 = M_2 &= 1.0 \ \text{kg} \\
+			K &= 40 \ \text{N/m}\\
+			k &= 2.0 \ \text{v-s} \\
+			R &= 100  \ \Omega \\
+			r &= 0.01 \ \text{m}
+		\end{align*}
+	
+		The numerical state space model can then be calculated as:
+		 \begin{equation}
+			\begin{aligned}
+				A = \mqty[	0	& 0		& 1		& 0\\
+							0	& 0	 	& 0		& 1\\
+							-40	& 40	& -400	& 0\\
+							40	& -40	& 0		& -400
+							] \ \ \
+				&B = \mqty[ 0	& 0\\
+							0	& 0\\
+							2	& 0\\
+							0	& 2
+							]\\
+				C = \mqty[	1	&0	&0	&0\\
+							0	&1	&0	&0] \ \ \
+				&D = \mqty[\zmat{2}{2}]
+			\end{aligned}
+			\label{eq:carts_state_matrices}
+		\end{equation}
+		
+		\subsubsection{Transfer Function Calculations}
+			The transfer functions for the system can be directly calculated using \eqref{eq:tf_def}. For the dual cart system, the transfer function matrix can be calculated as:
+			\begin{equation}
+				H(s) = \mqty[	\cfrac{2}{s^2+400s+40}	&\cfrac{80}{(s^2+400s+40)^2}\\
+								0						&\cfrac{2}{2^2+400s+40}
+								]
+			\end{equation}
+	
+		\subsubsection{System Pole Calculation}
+			The characteristic equation for the dual cart system can be calculated with $\det(sI-A)$ and is defined as:
+			\begin{equation}
+				\Delta (s) = (s^2 + 400s +40)^2 = (s+0.1)^2(s+400)^2
+				\label{eq:carts_Delta_s}
+			\end{equation}
+			
+			From \eqref{eq:carts_Delta_s} it can be seen that the system poles and multiplicities are defined as:
+			\begin{equation}
+				\begin{aligned}
+					&\lambda_1 = -0.1, \ m_1 = 2\\
+					&\lambda_2 = -400, \ m_2 = 2
+				\end{aligned}
+			\end{equation}
+		
+			From these poles it can be seen that the carts are a stable and over-damped system.
+	
+	\newpage
+	\subsection{Single Motor Controlability Analysis}
+		To test whether the system is fully controllable using only the first motor, the following can be redefined: $\frac{k_2}{M_2 R_2 r_r} = 0$. This results in the input matrix, $B$, to be redefined as:
+		
+		\begin{equation}
+			B_1 = \mqty[0	&0\\
+						0	&0\\
+						2	&0\\
+						0	&0]
+		\end{equation}
+		
+		The controlability of the system pair $(A, B_1)$ can then be determined by analyzing the controllability matrix defined as:
+		
+		\begin{equation}
+			\begin{aligned}
+				U_1 &= \mqty[B		&A B_1		&A^2 B_1	&A^3 B_1]\\
+					&= \mqty[0	&0	&2		&0	&-800	&0	&3.2e5	&0\\
+							 0	&0	&0		&0	&0		&0	&80		&0\\
+							 2	&0	&-800	&0	&3.2e5	&0	&-1.3e8	&0\\
+							 0	&0	&0		&0	&80		&0	&-6.4e4	&0]
+			\end{aligned}
+		\end{equation}
+		
+		Clearly, given the 4 independent non-zero columns, it can be seen $\rank(U_1) = 4$. Thus, the system is fully controllable using a single motor.
+		
+	\subsection{Both Motor Controlability Analysis}
+		Although given the previous result, it can be determined that the system is controllable through inheritance, this can be confirmed by testing the system pair with both inputs as defined in \eqref{eq:carts_state_matrices}.
+		
+		The controlability of the system pair $(A, B)$ can then be determined by analyzing the controllability matrix defined as:
+		
+		\begin{equation}
+			\begin{aligned}
+				U_2 &= \mqty[B		&AB				&A^2B			&A^3B]\\
+					&= \mqty[0	&0	&2		&0		&-800	&0		&3.2e5	&80\\
+							 0	&0	&0		&2		&0		&-800	&80		&3.2e5\\
+						 	 2	&0	&-800	&0	 	&3.2e5	&0		&-1.3e8	&-6.4e4\\
+							 0	&2	&0		&-800	&80		&3.2e5	&-6.4e4	&-1.3e8]
+			\end{aligned}
+		\end{equation}
+		
+		It can also be determined that $\rank(U_2) = 4$. Thus, the system is fully controllable using both motors.
+	
+	\newpage
+	\subsection{One Cart Position Observability Analysis}
+		To test whether the system is fully observable if only the position of the first cart is measured, a $C$ matrix can be defined as:
+		
+		\begin{equation}
+			C_1 = \mqty[1	&0	&0	&0\\
+					  	0	&0	&0	&0]
+		\end{equation}
+
+		The observability of the system pair $(A, C)$ can then be determined by analyzing the observability matrix defined as:
+		
+		\begin{equation}
+			V_1 = \mqty[C_1\\ C_1A\\ C_1A^2\\ C_1A^3]
+				= \mqty[1		&0		&0		&0\\
+						0		&0		&0		&0\\
+						0		&0		&1		&0\\
+						0		&0		&0		&0\\
+						-40		&40		&-400	&0\\
+						0		&0		&0		&0\\
+						16000	&-16000	&16000	&40\\
+						0		&0		&0		&0]
+		\end{equation}
+		
+		Clearly, $\rank(V_1) = 4$. Thus, the system is fully observable by measuring only the position of the first cart.
+
+	\subsection{One Cart Velocity Observability Analysis}
+		To test whether the system is fully observable if only the velocity of the first cart is measured, a $C$ matrix can be defined as:
+		
+		\begin{equation}
+			C_2 = \mqty[0	&0	&1	&0\\
+						0	&0	&0	&0]
+		\end{equation}
+		
+		The observability of the system pair $(A, C_2)$ can then be determined by analyzing the observability matrix defined as:
+		
+		\begin{equation}
+			V_2 = \mqty[C_2\\ C_2A\\ C_2A^2\\ C_2A^3]
+				= \mqty[0		&0		&1		&0\\
+						0		&0		&0		&0\\
+						-40		&40		&-400	&0\\
+						0		&0		&0		&0\\
+						16000	&-16000	&16000	&40\\
+						0		&0		&0		&0\\
+						-6.4e7	&6.4e7	&-6.4e7	&-3.2e4\\
+						0		&0		&0		&0]
+		\end{equation}
+		
+		In order to test the rank of $V_2$, the non-zero rows are complied into the following matrix:
+		
+		\begin{equation}
+			\tilde{V_2} = \mqty[0		&0		&1		&0\\
+								-40		&40		&-400	&0\\
+								16000	&-16000	&16000	&40\\
+								-6.4e7	&6.4e7	&-6.4e7	&-3.2e4]
+		\end{equation}
+		
+		To test if $\tilde{V_2}$ is full rank, the determinant is taken: $\det(\tilde{V_2}) = 0$. Thus, $\tilde{V_2}$ is not full rank, and therefore, $\rank(V_2) < 4$. Thus, the system is not fully observable by measuring only the velocity of the first cart.
+			
+		\subsection{One Cart Velocity Observability Analysis}
+			To test whether the system is fully observable if only the velocities of the first and second cart are measured, a $C$ matrix can be defined as:
+			
+			\begin{equation}
+				C_3 = \mqty[0	&0	&1	&0\\
+							0	&0	&0	&1]
+			\end{equation}
+			
+			The observability of the system pair $(A, C_3)$ can then be determined by analyzing the observability matrix defined as:
+			
+			\begin{equation}
+				V_3 = \mqty[C_3\\ C_3A\\ C_3A^2\\ C_3A^3]
+					= \mqty[0		&0		&1		&0\\
+							0		&0		&0		&1\\
+							-40		&40		&-400	&0\\
+							40		&-40		&0		&-400\\
+							16000	&-16000	&16000	&40\\
+							-16000	&16000	&40		&16000\\
+							-6.4e7	&6.4e7	&-6.4e7	&-3.2e4\\
+							6.4e7	&-6.4e7	&-3.2e4	&-6.4e7]
+			\end{equation}
+			
+			The rank of $V_3$ can be determined using the reduced-row echelon form given as:
+			\begin{equation}
+				\tilde{V_3} = \mqty[1	&-1	&10	&5e-3\\
+									0	&0	&1	&1\\
+									0	&0	&0	&1\\
+									0	&0	&0	&0\\
+									0	&0	&0	&0\\
+									0	&0	&0	&0\\
+									0	&0	&0	&0\\
+									0	&0	&0	&0]
+			\end{equation}
+			
+			Thus, $\rank(\tilde{V_2}) = 3$, and therefore, $\rank(V_2) < 4$. This leads to the conclusion that the system is not fully observable by measuring only the velocity of both the first and second cart.
+	
+	\newpage
+	\subsection{State Feedback Control}
+		To stabilize the coupled cart system using the following control law and desired poles, the same process as in the first problem can be followed:
+		\begin{equation}
+			u = K * x
+		\end{equation}
+	
+		\begin{equation}
+			\lambda_{1,2,3,4} = {-1 \pm j, -100 \pm j100}
+			\label{eq:Desiered_poles2}
+		\end{equation}
+		
+		The ideal $\Delta_{cls} (s)$ can be calculated by the following:
+		\begin{equation}
+			\begin{aligned}
+				\Delta_{cls} (s) &= (s + \lambda_1) (s + \lambda_2) (s + \lambda_3)(s+\lambda_4)\\
+				&= (s + 1 - j) (s + 1 -j) (s+ 100 - j100)(s + 100 + j100)\\
+				&\approx s^4 + 202 s^3 + 20402 s^2 + 40400 s + 40000\\
+				&= s^4 + \alpha_1 s^3 + \alpha_2 s^2 + \alpha_3 s + \alpha_4
+			\end{aligned} \label{eq:ideal_char_poly2}
+		\end{equation}
+		
+		Given the control law of $u = - K x$, the system can be stabilized using a matrix $K$ that satisfies the following:
+		
+		\begin{equation}
+			\det(A + B K) = \Delta_{cls} (s)
+		\end{equation}
+		
+		It is important to note that $B$ is redefined as the following to represent only using the first cart motor:
+		
+		\begin{equation}
+			B = \mqty[0\\0\\2\\0]
+		\end{equation}
+		
+		This can be done explicitly using akerman's formula with the controllable conical form and then converting to the actual system. The ackerman's formula defines the gain matrix to be the following for the conical form:
+		
+		\begin{equation}
+			\hat{K} = \mqty[\alpha_4 - \bar{\alpha_4} & \alpha_3 - \bar{\alpha_3} & \alpha_2 - \bar{\alpha_2} & \alpha_1 - \bar{\alpha_1}]
+		\end{equation}
+		
+		This can then be converted to the gain matrix:
+		
+		\begin{equation}
+			\begin{aligned}
+				K &= \hat{K} P^{-1} \approx \mqty[5e4&-5e4&300&-5e5] 
+			\end{aligned}
+			\label{eq:pendulum_state_feedback_K}
+		\end{equation}
+
+
+
+
+
+\newpage
+\appendix
+
+\section{Problem Set D: Extra Credit Problems (Simulations)}
+
+	\subsection{PSD1-E1: Simulating the stabilization of the Inverted Pendulum as designed}
+		Using the controller designed for the inverted pendulum in \sectionname \ \ref{sec:PSD_pblm1} the system can be tested using the linear model within the simulink model shown in \figurename \ \ref{fig:psdsimulinkmodel1}.
+		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=1\linewidth]{Fig/PSD_SimulinkModel_1}
+			\caption{Simulink Model for State Feedback control of the inverted pendulum system.}
+			\label{fig:psdsimulinkmodel1}
+		\end{figure}
+		
+		The MATLAB code found in \appendixname \ref{apx:PSD_MATLAB} was used to generate the "ss" model from the control systems toolbox and the place command was used to generate more exact gain values. This was then simulated in Simulink and the resulting control signal and system response for all 4 states can be found in \figurename \ \ref{fig:psdsimulation1}.
+		
+		\begin{figure}[p]
+			\centering
+			\includegraphics[width=0.7\linewidth]{Fig/PSD_ControlSignal_1}
+			\includegraphics[width=0.7\linewidth]{Fig/PSD_SystemResponse_1}
+			\caption{Simulated Response of for the state feedback control system.}
+			\label{fig:psdsimulation1}
+		\end{figure}
+	
+	\newpage
+		\subsection{PSD1-E2: Simulating the stabilization of the Inverted Pendulum with a faster response}
+			In order to decrease the response time of the inverted pendulum system, a simple solution is to move the poles themselves further from the $j\omega$ axis. Given how the settling time is determined for a second order system ($\tau = \frac{1}{\zeta \omega_n}$) a simple method that works in that case is to increase $\omega_n$, which is equivalent to increasing the magnitude of the dominant poles themselves. This can be expanded to the (rough) estimation that $\tau$ can be modified as such:
+			\begin{equation}
+				\lambda_{new} = k * \lambda_{old} \implies \tau_{new} \approx \frac{\tau_{old}}{k} 
+			\end{equation}
+			
+			Using these new poles, the gain matrix can be calculated (done using the place command this time as writing it all out on the whiteboard again did not sound like fun). The poles and gains were calculated in MATLAB, using the code found in \appendixname \ \ref{apx:PSD_MATLAB}, and were calculated as:
+			
+			\begin{align}
+				\lambda_{1,2,3,4} &= {-40, -20 \pm j 20 \sqrt{3}, -800}\\
+				\nonumber\\
+				K &= \mqty[1.3e7&6.7e5&1.3e7&6.7e7]
+			\end{align}
+			
+			This was then simulated in a similar simulink model, shown in \figurename \ \ref{fig:psdsimulinkmodel2}, and compared with the originally designed system. The resulting control signal and system response for all 4 states can be found in \figurename \ref{fig:psdsimulation2}. The same MATLAB file was used for this and can be seen in \appendixname \ \ref{apx:PSD_MATLAB}.
+			
+			\begin{figure}[p]
+				\centering
+				\includegraphics[width=1\linewidth]{Fig/PSD_SimulinkModel_2}
+				\caption{Simulink Model for State Feedback control of the inverted pendulum system.}
+				\label{fig:psdsimulinkmodel2}
+			\end{figure}
+			
+			\begin{figure}[p]
+				\centering
+				\includegraphics[width=0.7\linewidth]{Fig/PSD_ControlSignal_2}
+				\includegraphics[width=0.7\linewidth]{Fig/PSD_SystemResponse_2}
+				\caption{Simulated Response of for the state feedback control system comparing the two gains.}
+				\label{fig:psdsimulation2}
+			\end{figure}
+	\newpage
+	\subsection{MATLAB Code}
+		\label{apx:PSD_MATLAB}
+		\begin{Verbatim}[tabsize=4]
+	% MECH 6300 - Problem Set D
+	% Inverted Pendulum
+	m = 0.2;
+	M = 1;
+	l = 1;
+	g = 9.8;
+	k = 2;
+	R = 50;
+	r = 0.1;
+	
+	A = [0  1   0   0;
+		0   (-k^2)/(M*R*r^2)    (-m*g)/(M)  0;
+		0   0   0   1;
+		0   (k^2)/(M*l*R*r^2)   ((m+M)*g)/(M*l) 0];
+	B = [0;
+		k/(M*R*r);
+		0;
+		-k/(M*l*R*r)];
+	C = eye(4);
+	D = 0;
+	
+	sys = ss(A,B,C,D)
+	
+	% Original Design
+	idealPoles = [-4,-2+j*2*sqrt(3),-2-j*2*sqrt(3),-800]
+	
+	K = place(A,B,idealPoles)
+	
+	newPoles = pole(feedback(sys,K))
+	
+	
+	% Simulation ---- Simulink Model
+	x0 = [5,0,0.2,0];
+	
+	% Additional Speed Up
+	disp('decreasing the distance to the jw axis to speed up response')
+	idealPoles_2 = [-40,-20+j*20*sqrt(3),-20-j*20*sqrt(3),-800]
+	
+	K_2 = place(A,B,idealPoles_2)
+	
+	newPoles2 = pole(feedback(sys,K_2))
+		\end{Verbatim}
+
+\newpage
+\section{Problem Set E: Extra Credit Problems (Dynamics Output Feedback Analysis)}
+
+	\subsection{PSE-3a: Transfer Function}
+		Using the model of the inverted pendulum from \eqref{eq:pendulum_state_matrices} and the gain matrices developed for State Feedback Control \eqref{eq:pendulum_state_feedback_K} and State Observer \eqref{eq:luemberger_observer} a dynamic output feedback compensator can be developed. The transfer function of the compensator when placed within the closed look system is calculated as:
+		\begin{equation}
+			\begin{aligned}
+				G(s) &= K (sI - (A+BK+LC))^{-1} L\\
+					 &= \cfrac{(s-3.132)(s+4)(s+1)(s^2+4s+16)}{s (s+3.282)(s-3.132)(s^2 + 5.681s + 50.94)}
+			\end{aligned}
+		\end{equation}
+	
+	\subsection{PSE-3b: Root Locus Analysis}
+		Variation in the gains of the system can be analyzed using a root locus. As seen in \figurename \ \ref{fig:rlocus}, apart from the canceled pole-zero pair at 3.13 and unstable (or marginally stable) poles of P that appear on the plot, the poles of the transfer function are stable at $k=1$ (as designed). Using MATLAB to solve for the poles of $T$ symbolically, the gain $\alpha$ in which the two roots cross the $j\omega$ axis can be found to be:
+		
+		\begin{equation}
+			\begin{aligned}
+				T = 1 + \alpha G P\\
+				\lambda_{1,2} = 0 \pm j 2.46 \ \text{when} \ \alpha \approx 1.58
+			\end{aligned}
+		\end{equation}
+		
+		From this it can be said that the closed-loop system is marginally stable when $\alpha \in \left(0,1.58\right]$.
+		
+		
+		\begin{figure}[p]
+			\centering
+			\includegraphics[width=0.7\linewidth]{Fig/PSE_rlocus_full}\\
+			\includegraphics[width=0.7\linewidth]{Fig/PSE_rlocus_zoomed}
+			\caption{Root locus Analysis (and zoomed in version)}
+			\label{fig:rlocus}
+		\end{figure}
+		
+	\subsection{PSE-3c: Sensitivity Analysis}
+		Given the concern over an incorrect model and compensator gains, the sensitivity to an arbitrary gain is important. In this case, from the Root Locus analysis, it appears as though $\alpha$ has a small range that may be reasonable for some applications. This result indicates that if the gains are increased (even marginally) the closed-loop system will become less stable and may even cross into instability within 50\% of the calculated gains. For the most part this means that the decision of if this control method is reasonable depends on not only the safety factor in designing a controller, but also on whether the system needs to be designed to be robust against changes to the system dynamics (i.e. increasing the mass on the pendulum).
+		
+	\newpage
+	\subsection{PSE: MATLAB Code}
+\begin{Verbatim}[tabsize=4]
+	% MECH 6300 - Problem Set E
+	clear
+	close all
+	
+	% Inverted Pendulum
+	m = 0.2;
+	M = 1;
+	l = 1;
+	g = 9.8;
+	k = 2;
+	R = 50;
+	p_obsv_ideal2 = 0.01;
+	
+	A = [0  1   0   0;
+	0   (-k^2)/(M*R*p_obsv_ideal2^2)    (-m*g)/(M)  0;
+	0   0   0   1;
+	0   (k^2)/(M*l*R*p_obsv_ideal2^2)   ((m+M)*g)/(M*l) 0];
+	B = [0;
+	k/(M*R*p_obsv_ideal2);
+	0;
+	-k/(M*l*R*p_obsv_ideal2)];
+	C = [1  0   0   0];
+	D = 0;
+	
+	sys = ss(A,B,C,D)
+	
+	H = tf(sys)
+	H_zpk = zpk(H)
+	
+	u = ctrb(A,B);
+	rank_u = rank(u)
+	v = obsv(A,C);
+	rank_v = rank(v)
+	
+	sys_ctrbl = canon(sys,'companion')
+	
+	% State-Feedback Design (from PSD)-----------------------------------
+	sys_feedback = ss(A,B,eye(4),0);
+	p_f_ideal = [-4,-2+j*2*sqrt(3),-2-j*2*sqrt(3),-800];
+	
+	K = place(A,B,p_f_ideal)
+	
+	newPoles_feedback = pole(feedback(sys_feedback,K))
+	
+	% Simulation ---- Simulink Model
+	x0 = [5,0,0.2,0];
+	
+	% Additional Speed Up
+	p_f_ideal_2 = [-40,-20+j*20*sqrt(3),-20-j*20*sqrt(3),-800];
+	
+	K_2 = place(A,B,p_f_ideal_2);
+	
+	newPoles_feedback2 = pole(feedback(sys_feedback,K_2));
+	% -----------------------------------------------------------------------
+	
+	% Full-Order Observer
+	syms s
+	Delta_s_full = (s/5)^4 + 2.613 * (s/5)^3 + (2 + sqrt(2)) * (s/5)^2 + 2.613 * (s/5) + 1;
+	p_obsv_ideal = double(root(Delta_s_full,s));
+	
+	figure()
+	scatter(real(p_obsv_ideal),imag(p_obsv_ideal))
+	xmin = -5; xmax = 0.5;
+	ymin = -5; ymax = -ymin;
+	xlim([xmin xmax])
+	ylim([ymin ymax])
+	line([0,0],ylim)
+	line(xlim,[0,0])
+	rectangle('Position',[-5,-5,10,10],'Curvature',[1 1])
+	title('Full-Order Observer Poles')
+	xlabel('Real')
+	ylabel('Imag')
+	
+	close all
+	
+	F = blkdiag([real(p_obsv_ideal(1)),imag(p_obsv_ideal(1)); ...
+	-imag(p_obsv_ideal(1)),real(p_obsv_ideal(1))], ...
+	[real(p_obsv_ideal(3)),imag(p_obsv_ideal(3)); ...
+	-imag(p_obsv_ideal(3)),real(p_obsv_ideal(3))])
+	G = [1;1;1;1]
+	rank_ctrb_FG = rank(ctrb(F,G))
+	
+	T = lyap(A,-F,-G*C)
+	
+	det_T = det(T)
+	
+	H = T * B
+	
+	newPoles_obsv = eig(F)
+	
+	
+	% Reduced-Order Observer
+	syms s
+	Delta_s_reduced = (s/5)^3 + 2 * (s/5)^2 + 2 * (s/5) + 1;
+	p_obsv_ideal2 = double(root(Delta_s_reduced,s))
+	
+	figure()
+	scatter(real(p_obsv_ideal2),imag(p_obsv_ideal2))
+	xmin = -6; xmax = 0.5;
+	ymin = -5; ymax = -ymin;
+	xlim([xmin xmax])
+	ylim([ymin ymax])
+	line([0,0],ylim)
+	line(xlim,[0,0])
+	rectangle('Position',[-5,-5,10,10],'Curvature',[1 1])
+	title('Reduced-Order Observer Poles')
+	xlabel('Real')
+	ylabel('Imag')
+	
+	close all
+	
+	C2 = [1,0,0,0];
+	
+	F2 = blkdiag([real(p_obsv_ideal(1)),imag(p_obsv_ideal(1)); ...
+	-imag(p_obsv_ideal(1)),real(p_obsv_ideal(1))], ...
+	-5)
+	G2 = [1;1;1]
+	rank_ctrb_FG = rank(ctrb(F2,G2))
+	
+	T2 = lyap(-F2,A,-G2*C2)
+	
+	P2 = [C2;T2]
+	
+	P2_inv = inv(P2)
+	
+	H2 = T2 * B
+	
+	newPoles_obsv = eig(F2)
+	
+	
+	
+	close all
+	
+	
+	% Symbolic Version ------------------------------------------------------
+	syms s
+	s_I_A_inv = inv(s * eye(4) - A);
+	s_I_A_det = 25*det(s * eye(4) - A)
+	
+	charPoly = factor(det(s * eye(4) - A),'FactorMode', 'real');
+	
+	stm_no_den = simplify(25*(s_I_A_inv.* det(s*eye(4)-A)));
+	
+	alphas = sym2poly(s_I_A_det/25)
+	
+	u_bar_inv = [alphas(4),alphas(3),alphas(2),alphas(1);
+	alphas(3),alphas(2),alphas(1),0;
+	alphas(2),alphas(1),0,0;
+	alphas(1),0,0,0]
+	P_inv = u * u_bar_inv
+	P = inv(P_inv)
+	
+	A_bar = P * A * P_inv;
+	B_bar = P * B;
+	C_bar =     C * P_inv;
+	D_bar = D;
+	
+	sys_conical = ss(A_bar,B_bar,C_bar,D_bar)
+	
+	% State Feedback
+	alphas_bar_feedback = poly(p_f_ideal)
+	
+	K_bar = fliplr(alphas(2:5)) - fliplr(alphas_bar_feedback(2:5))
+	K_sym = K_bar * P
+	
+	newPoles_sym = pole(feedback(sys_feedback,-K_sym))
+	
+	
+	
+	% Problem 3 (Extra Credit)---------------------------------------------
+	P = sys;
+	L = -G;
+	K = -K;
+	syms s
+	G_sym = K * inv(s * eye(4) - (A + B*K + L*C)) * L
+	
+	
+	[symNum,symDen] = numden(G_sym(1)); %Get num and den of Symbolic TF
+	TFnum = sym2poly(symNum);    %Convert Symbolic num to polynomial
+	TFden = sym2poly(symDen);    %Convert Symbolic den to polynomial
+	G = tf(TFnum,TFden)
+	
+	
+	G_sys = ss(A+B*K+L*C,L,K,0)
+	G_zpk = zpk(G_sys)
+	
+	figure()
+	rlocus(G*P)
+	
+	figure()
+	rlocus(G*P)
+	xlim([-10,10])
+	ylim([-15,15])
+	
+	a = 1
+	
+	T = 1 + a * G * P
+	
+	
+	T_zeros = zero(T)
+	T_poles = pole(T)
+	
+	
+	[Num,Den] = tfdata(G*P,'v');
+	syms s
+	sys_syms=poly2sym(Num,s)/poly2sym(Den,s);
+	
+	syms a
+	T = 1+a*sys_syms
+	roots = solve(T==0,a)
+	
+	r = solve(roots==a,s)
+	
+	a = 1.58
+	double(subs(r))
+	
+\end{Verbatim}
+
+
+\end{document}
